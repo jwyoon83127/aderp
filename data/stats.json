@@ -1,0 +1,6 @@
+{
+    "revenue": { "value": "$142,400", "trend": "+12.4%" },
+    "active_clients": { "value": "24", "trend": "+2" },
+    "avg_roas": { "value": "4.2x", "trend": "-0.3x" },
+    "ai_efficiency": { "value": "92%", "trend": "Stable" }
+}

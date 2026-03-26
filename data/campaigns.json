@@ -1,0 +1,7 @@
+[
+    {"name": "Lumina Tech Spring", "channel": "Meta Ads", "spend": "$24,500", "roas": "5.2x", "status": "active"},
+    {"name": "Global SaaS Expansion", "channel": "Google Search", "spend": "$18,200", "roas": "3.8x", "status": "active"},
+    {"name": "Aura Wearables", "channel": "TikTok", "spend": "$12,400", "roas": "2.1x", "status": "warning"},
+    {"name": "Zenith Fitness", "channel": "Meta Ads", "spend": "$9,800", "roas": "4.5x", "status": "active"},
+    {"name": "Peak Performance", "channel": "Google Display", "spend": "$15,600", "roas": "3.1x", "status": "active"}
+]

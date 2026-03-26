@@ -1,0 +1,13 @@
+{
+    "resources": {
+        "compute": { "value": 78, "trend": "+5%" },
+        "bandwidth": { "value": 92, "trend": "Critical" },
+        "roi": { "value": "4.8" }
+    },
+    "members": [
+        {"name": "김철수", "role": "Senior Ads Strategist", "projects": 4, "score": 94, "tag": "Expert", "status": "Busy"},
+        {"name": "이영희", "role": "Creative Director", "projects": 3, "score": 88, "tag": "Design", "status": "Active"},
+        {"name": "박지성", "role": "AI Engineer", "projects": 5, "score": 91, "tag": "ML", "status": "Busy"},
+        {"name": "정해인", "role": "Account Manager", "projects": 2, "score": 85, "tag": "Client", "status": "Available"}
+    ]
+}
