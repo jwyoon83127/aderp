@@ -37,87 +37,73 @@
                 </button>
             </div>
 
-            <!-- API Connection Management -->
+            <!-- External Integration Management (Combined Section) -->
             <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-outline-variant/10">
-                <h2 class="font-bold text-lg mb-6 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary">api</span> API 연결 관리
+                <h2 class="font-bold text-lg mb-8 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">hub</span> 외부 연동 관리
                 </h2>
-                <div class="space-y-6">
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black uppercase text-on-surface-variant ml-1">Google Gemini API Key</label>
+                
+                <div class="space-y-12">
+                    <!-- 1. Google Gemini API -->
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                                <span class="material-symbols-outlined text-sm">psychology</span>
+                            </div>
+                            <h3 class="text-sm font-black uppercase tracking-tight">AI 에이전트 (Gemini Pro)</h3>
+                        </div>
                         <div class="flex gap-4">
-                            <input type="password" id="gemini-api-key" placeholder="AI Studio에서 발급받은 키를 입력하세요" class="flex-1 bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-sm font-bold focus:ring-primary">
-                            <button onclick="saveApiKey()" class="bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:scale-105 transition-transform flex items-center gap-2">
-                                <span class="material-symbols-outlined text-sm">save</span> 연결
+                            <input type="password" id="gemini-api-key" placeholder="Google AI Studio API Key" class="flex-1 bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-xs font-bold focus:ring-primary">
+                            <button onclick="saveApiKey()" class="bg-primary text-white px-6 py-3 rounded-xl font-bold text-xs shadow-lg shadow-primary/20 hover:scale-105 transition-transform flex items-center gap-2">
+                                <span class="material-symbols-outlined text-xs">link</span> 연결
                             </button>
                         </div>
-                        <p class="text-[10px] text-on-surface-variant font-medium mt-2">
-                            * 설정된 키는 `data/config.json`에 안전하게 저장됩니다. <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-primary hover:underline">API 키 발급받기</a>
-                        </p>
                     </div>
-                </div>
-            </div>
 
-            <!-- KakaoTalk Integration -->
-            <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-outline-variant/10">
-                <h2 class="font-bold text-lg mb-6 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-[#FEE500]">chat_bubble</span> 카카오톡 채널 연동
-                </h2>
-                <div class="space-y-6">
-                    <div class="p-4 bg-surface-container-low dark:bg-slate-800 rounded-2xl border border-outline-variant/10">
-                        <p class="text-[10px] font-black uppercase text-on-surface-variant mb-2">스킬 Webhook URL</p>
-                        <code class="text-xs font-mono bg-white dark:bg-slate-900 p-3 rounded-xl block border border-outline-variant/5">https://aderp.vercel.app/api/kakao/ask</code>
-                        <p class="text-[10px] text-on-surface-variant font-medium mt-4">
-                            * 카카오 i 오픈빌더에서 '스킬'을 생성하고 위 URL을 등록하세요. <a href="https://i.kakao.com/" target="_blank" class="text-primary hover:underline">오픈빌더 바로가기</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
+                    <div class="h-px bg-outline-variant/10"></div>
 
-            <!-- Ad Channel Integration (Meta/Google Ads) -->
-            <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-outline-variant/10">
-                <h2 class="font-bold text-lg mb-6 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary">ads_click</span> 광고 채널 연동 (Ads API)
-                </h2>
-                <div class="space-y-10">
-                    <!-- Meta/Facebook -->
+                    <!-- 2. KakaoTalk Integration -->
                     <div class="space-y-4">
-                        <h3 class="flex items-center gap-2 text-sm font-black">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="w-4 h-4" alt="Meta"> Meta (Facebook) Ads
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="space-y-1">
-                                <label class="text-[9px] font-black uppercase text-on-surface-variant ml-1">Access Token</label>
-                                <input type="password" id="meta-token" placeholder="EAA..." class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-xs font-bold focus:ring-primary">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-8 h-8 rounded-lg bg-[#FEE500]/10 flex items-center justify-center text-[#FEE500]">
+                                <span class="material-symbols-outlined text-sm">chat_bubble</span>
                             </div>
-                            <div class="space-y-1">
-                                <label class="text-[9px] font-black uppercase text-on-surface-variant ml-1">Ad Account ID</label>
-                                <input type="text" id="meta-account-id" placeholder="act_..." class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-xs font-bold focus:ring-primary">
-                            </div>
+                            <h3 class="text-sm font-black uppercase tracking-tight">카카오톡 채널 (오픈빌더 웹훅)</h3>
+                        </div>
+                        <div class="p-4 bg-surface-container-low dark:bg-slate-800 rounded-2xl border border-outline-variant/10">
+                            <p class="text-[9px] font-black uppercase text-on-surface-variant mb-2">Webhook URL</p>
+                            <code class="text-[10px] font-mono bg-white dark:bg-slate-900 p-3 rounded-lg block border border-outline-variant/5">https://aderp.vercel.app/api/kakao/ask</code>
                         </div>
                     </div>
 
-                    <!-- Google Ads -->
-                    <div class="space-y-4">
-                        <h3 class="flex items-center gap-2 text-sm font-black">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Google_Ads_logo.svg" class="w-4 h-4" alt="Google"> Google Ads
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="space-y-1">
-                                <label class="text-[9px] font-black uppercase text-on-surface-variant ml-1">Developer Token</label>
-                                <input type="password" id="google-dev-token" placeholder="Dev Token" class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-xs font-bold focus:ring-primary">
+                    <div class="h-px bg-outline-variant/10"></div>
+
+                    <!-- 3. Ads API Integration -->
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-8 h-8 rounded-lg bg-tertiary/10 flex items-center justify-center text-tertiary">
+                                <span class="material-symbols-outlined text-sm">ads_click</span>
                             </div>
-                            <div class="space-y-1">
-                                <label class="text-[9px] font-black uppercase text-on-surface-variant ml-1">Customer ID</label>
-                                <input type="text" id="google-customer-id" placeholder="123-456-7890" class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-xs font-bold focus:ring-primary">
+                            <h3 class="text-sm font-black uppercase tracking-tight">광고 매체 연동 (Meta & Google)</h3>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Meta -->
+                            <div class="space-y-3">
+                                <p class="text-[10px] font-bold flex items-center gap-2"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="w-3 h-3"> Meta Ads</p>
+                                <input type="password" id="meta-token" placeholder="Access Token" class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-2.5 px-4 text-[11px] font-bold focus:ring-primary">
+                                <input type="text" id="meta-account-id" placeholder="Ad Account ID" class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-2.5 px-4 text-[11px] font-bold focus:ring-primary">
+                            </div>
+                            <!-- Google -->
+                            <div class="space-y-3">
+                                <p class="text-[10px] font-bold flex items-center gap-2"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Google_Ads_logo.svg" class="w-3 h-3"> Google Ads</p>
+                                <input type="password" id="google-dev-token" placeholder="Developer Token" class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-2.5 px-4 text-[11px] font-bold focus:ring-primary">
+                                <input type="text" id="google-customer-id" placeholder="Customer ID" class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-2.5 px-4 text-[11px] font-bold focus:ring-primary">
                             </div>
                         </div>
+                        <button onclick="saveAdKeys()" class="w-full bg-on-surface text-surface py-4 rounded-2xl font-black text-xs hover:scale-[1.01] transition-transform flex items-center justify-center gap-2 mt-4">
+                            <span class="material-symbols-outlined text-sm">cloud_sync</span> 광고 API 정보 동기화
+                        </button>
                     </div>
-
-                    <button onclick="saveAdKeys()" class="w-full bg-on-surface text-surface py-4 rounded-2xl font-black text-sm hover:scale-[1.01] transition-transform flex items-center justify-center gap-2">
-                        <span class="material-symbols-outlined text-sm">cloud_sync</span> 광고 API 정보 저장 및 데이터 동기화
-                    </button>
-                    <p class="text-[9px] text-center text-on-surface-variant font-bold">* 입력하신 정보는 `data/config.json`에 암호화되지 않은 채로 보관되오니 보안에 유의하세요.</p>
                 </div>
             </div>
 
