@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - AdVantage AI{% endblock %}
+
+{% block content %}
+<div class="p-10 space-y-10">
+    <header>
+        <h1 class="text-3xl font-extrabold tracking-tight text-on-surface dark:text-white">환경 설정</h1>
+        <p class="text-on-surface-variant dark:text-slate-400 mt-1 font-medium">개인 프로필 및 AI 어시스턴트 설정을 관리하세요.</p>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Profile Section -->
+        <section class="lg:col-span-2 space-y-6">
+            <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-outline-variant/10">
+                <h2 class="font-bold text-lg mb-6 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">person</span> 개인 프로필
+                </h2>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase text-on-surface-variant ml-1">이름</label>
+                            <input type="text" value="JW Yoon" class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-sm font-bold focus:ring-primary">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase text-on-surface-variant ml-1">직함</label>
+                            <input type="text" value="CEO & Founder" class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-sm font-bold focus:ring-primary">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase text-on-surface-variant ml-1">이메일 주소</label>
+                        <input type="email" value="jw.yoon@advantage.ai" class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-sm font-bold focus:ring-primary">
+                    </div>
+                </div>
+                <button class="mt-8 bg-primary text-white px-8 py-3 rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+                    저장하기
+                </button>
+            </div>
+
+            <!-- AI Configuration -->
+            <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-outline-variant/10">
+                <h2 class="font-bold text-lg mb-6 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">psychology</span> AI 어시스턴트 설정
+                </h2>
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between p-4 bg-primary/5 rounded-2xl border border-primary/10">
+                        <div>
+                            <p class="text-sm font-bold">실시간 분석 모드</p>
+                            <p class="text-[10px] text-on-surface-variant font-medium">대시보드 지표 변화 시 자동으로 알림을 생성합니다.</p>
+                        </div>
+                        <div class="w-12 h-6 bg-primary rounded-full relative cursor-pointer">
+                            <div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-surface-container-low dark:bg-slate-800 rounded-2xl border border-outline-variant/5">
+                        <div>
+                            <p class="text-sm font-bold">대화형 최적화 추천</p>
+                            <p class="text-[10px] text-on-surface-variant font-medium">AI가 선제적으로 캠페인 예산 조정을 제안합니다.</p>
+                        </div>
+                        <div class="w-12 h-6 bg-outline-variant rounded-full relative cursor-pointer">
+                            <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sidebar Settings -->
+        <aside class="space-y-8">
+            <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-outline-variant/10">
+                <h2 class="font-bold text-sm mb-6 uppercase tracking-widest text-on-surface-variant">시스템 설정</h2>
+                <div class="space-y-4">
+                    <button class="w-full flex items-center justify-between p-4 hover:bg-surface-container-high rounded-2xl transition-all">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined">dark_mode</span>
+                            <span class="text-xs font-bold">다크 모드</span>
+                        </div>
+                        <span class="material-symbols-outlined text-xs">chevron_right</span>
+                    </button>
+                    <button class="w-full flex items-center justify-between p-4 hover:bg-surface-container-high rounded-2xl transition-all">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined">language</span>
+                            <span class="text-xs font-bold">언어 (Language)</span>
+                        </div>
+                        <span class="text-[10px] font-bold text-primary">한국어</span>
+                    </button>
+                    <button class="w-full flex items-center justify-between p-4 hover:bg-error/5 text-error rounded-2xl transition-all">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined">logout</span>
+                            <span class="text-xs font-bold">로그아웃</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-tertiary to-tertiary-container p-8 rounded-3xl text-white shadow-xl shadow-tertiary/10">
+                <h3 class="font-black text-xs uppercase tracking-widest mb-2">Pro Plan</h3>
+                <p class="text-xs font-bold leading-relaxed mb-4">현재 기업용 프로 플랜을 이용 중입니다. 모든 고급 AI 기능을 무제한으로 사용하실 수 있습니다.</p>
+                <div class="h-1.5 w-full bg-white/20 rounded-full overflow-hidden">
+                    <div class="h-full bg-white w-2/3"></div>
+                </div>
+                <p class="text-[9px] font-bold mt-2 opacity-70 text-right">30일 중 22일 남음</p>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}

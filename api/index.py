@@ -40,6 +40,10 @@ async def read_agent(request: Request):
 async def read_team(request: Request):
     return templates.TemplateResponse(request=request, name="team.html")
 
+@app.get("/settings", response_class=HTMLResponse)
+async def read_settings(request: Request):
+    return templates.TemplateResponse(request=request, name="settings.html")
+
 @app.get("/camp", response_class=HTMLResponse)
 async def read_campaigns(request: Request):
     return templates.TemplateResponse(request=request, name="camp.html")
