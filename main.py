@@ -7,14 +7,12 @@ from datetime import datetime
 
 app = FastAPI(title="AdVantage AI ERP")
 
-# Get the absolute path of the current file (backend/main.py)
-# This works more robustly in serverless (Vercel) environments
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# Frontend directory is adjacent to backend/ in the same root
-FRONTEND_DIR = os.path.join(os.path.dirname(BASE_DIR), "frontend")
+# Get the absolute path of the current file (main.py)
+# Root deployment for Vercel
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIR = os.path.join(ROOT_DIR, "frontend")
 
 # Serve static files (HTML, CSS, images if any)
-# Use the same directory for static serving
 app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
 templates = Jinja2Templates(directory=FRONTEND_DIR)
