@@ -1,3 +1,4 @@
+# AdVantage AI ERP - Vercel Deployment Trigger: 2026-03-26T16:45:00
 import os
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
