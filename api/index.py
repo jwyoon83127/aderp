@@ -5,42 +5,52 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from datetime import datetime
 
+from pathlib import Path
+
 app = FastAPI(title="AdVantage AI ERP")
 
-# Get the absolute path of the root directory
+# Robust root directory discovery
 # __file__ is /var/task/api/index.py
-# parent is /var/task/api
-# grandparent is /var/task (the project root)
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-ROOT_DIR = os.path.dirname(CURRENT_DIR)
-FRONTEND_DIR = os.path.join(ROOT_DIR, "frontend")
+BASE_DIR = Path(__file__).resolve().parent
+ROOT_DIR = BASE_DIR.parent
+FRONTEND_DIR = ROOT_DIR / "frontend"
 
 # Serve static files (HTML, CSS, images if any)
-app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
+app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
 
-templates = Jinja2Templates(directory=FRONTEND_DIR)
+templates = Jinja2Templates(directory=str(FRONTEND_DIR))
+
+def render_diagnostic(name: str, request: Request):
+    try:
+        return templates.TemplateResponse(request=request, name=name)
+    except Exception as e:
+        import traceback
+        return HTMLResponse(
+            content=f"<h3>Error rendering {name}:</h3><pre>{traceback.format_exc()}</pre>", 
+            status_code=500
+        )
 
 # --- Page Routes ---
 
 @app.get("/", response_class=HTMLResponse)
 async def read_dashboard(request: Request):
     """CEO Dashboard"""
-    return templates.TemplateResponse(request=request, name="index.html")
+    return render_diagnostic("index.html", request)
 
 @app.get("/agent", response_class=HTMLResponse)
 async def read_agent(request: Request):
     """AI Agent Interface"""
-    return templates.TemplateResponse(request=request, name="agent.html")
+    return render_diagnostic("agent.html", request)
 
 @app.get("/team", response_class=HTMLResponse)
 async def read_team(request: Request):
     """Team & Resources"""
-    return templates.TemplateResponse(request=request, name="team.html")
+    return render_diagnostic("team.html", request)
 
 @app.get("/camp", response_class=HTMLResponse)
 async def read_campaigns(request: Request):
     """Campaign Performance Monitoring"""
-    return templates.TemplateResponse(request=request, name="camp.html")
+    return render_diagnostic("camp.html", request)
 
 # --- Dynamic Data API Endpoints ---
 
