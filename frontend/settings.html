@@ -37,6 +37,27 @@
                 </button>
             </div>
 
+            <!-- API Connection Management -->
+            <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-outline-variant/10">
+                <h2 class="font-bold text-lg mb-6 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">api</span> API 연결 관리
+                </h2>
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase text-on-surface-variant ml-1">Google Gemini API Key</label>
+                        <div class="flex gap-4">
+                            <input type="password" id="gemini-api-key" placeholder="AI Studio에서 발급받은 키를 입력하세요" class="flex-1 bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-sm font-bold focus:ring-primary">
+                            <button onclick="saveApiKey()" class="bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:scale-105 transition-transform flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">save</span> 연결
+                            </button>
+                        </div>
+                        <p class="text-[10px] text-on-surface-variant font-medium mt-2">
+                            * 설정된 키는 `data/config.json`에 안전하게 저장됩니다. <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-primary hover:underline">API 키 발급받기</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             <!-- AI Configuration -->
             <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-outline-variant/10">
                 <h2 class="font-bold text-lg mb-6 flex items-center gap-2">
@@ -104,4 +125,35 @@
         </aside>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    async function saveApiKey() {
+        const key = document.getElementById('gemini-api-key').value;
+        if (!key) {
+            alert('API 키를 입력해주세요.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/settings/save_key', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key: key })
+            });
+            const data = await response.json();
+            
+            if (response.ok) {
+                alert('API 키가 성공적으로 저장되었습니다!');
+                document.getElementById('gemini-api-key').value = '****************';
+            } else {
+                alert('저장 중 오류가 발생했습니다: ' + data.error);
+            }
+        } catch (error) {
+            console.error('Error saving key:', error);
+            alert('서버와 연결할 수 없습니다.');
+        }
+    }
+</script>
 {% endblock %}
