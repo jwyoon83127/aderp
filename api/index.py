@@ -87,51 +87,70 @@ async def save_key(data: dict):
         
     return {"message": "Key saved successfully"}
 
-@app.post("/api/agent/ask")
-async def ask_agent(query: dict):
-    text = query.get('text', '')
-    
+@app.post("/api/kakao/ask")
+async def kakao_ask(request: Request):
+    try:
+        payload = await request.json()
+        utterance = payload.get("userRequest", {}).get("utterance", "")
+        
+        # Call the existing AI logic (refactored into a helper for reuse)
+        response_data = await get_ai_response(utterance)
+        ai_text = response_data.get("response")
+
+        return {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText": {
+                            "text": ai_text
+                        }
+                    }
+                ]
+            }
+        }
+    except Exception as e:
+        return {
+            "version": "2.0",
+            "template": {
+                "outputs": [{"simpleText": {"text": f"에러가 발생했습니다: {str(e)}"}}]
+            }
+        }
+
+async def get_ai_response(text: str):
     config = load_json("config.json") or {}
     api_key = config.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY")
     
     if not api_key:
-        return {
-            "response": "Gemini API 키가 설정되지 않았습니다. [설정] 메뉴에서 API 키를 먼저 등록해 주세요.",
-            "timestamp": datetime.now().isoformat()
-        }
+        return {"response": "Gemini API 키가 설정되지 않았습니다. ERP 설정에서 키를 등록해 주세요."}
 
     try:
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel('gemini-pro')
         
-        # Pull context from ERP data
         stats = load_json("stats.json") or {}
         campaigns = load_json("campaigns.json") or []
         
         prompt = f"""
-        당신은 AdVantage AI ERP의 전문 비즈니스 분석가입니다. 
-        사용자의 질문에 현재의 비즈니스 데이터를 바탕으로 전문적이고 친절하게 답변해 주세요.
-        
-        현재 데이터 요약:
-        - 매출: {stats.get('revenue', {}).get('value', 'N/A')} ({stats.get('revenue', {}).get('trend', '')})
-        - ROAS: {stats.get('avg_roas', {}).get('value', 'N/A')}
-        - 활성 캠페인 수: {len(campaigns)}
-        
+        AdVantage AI ERP 비즈니스 분석가로서 답변해 주세요.
+        현재 데이터: 매출 {stats.get('revenue', {}).get('value')}, {len(campaigns)}개 캠페인 운영 중.
         사용자 질문: {text}
-        
-        전문적인 금융/마케팅 톤으로 답변해 주세요. 한국어로 답변해 주세요.
+        비즈니스 톤으로 한국어로 답변해 주세요.
         """
         
         response = model.generate_content(prompt)
-        return {
-            "response": response.text,
-            "timestamp": datetime.now().isoformat()
-        }
+        return {"response": response.text}
     except Exception as e:
-        return {
-            "response": f"Gemini 엔진 호출 중 오류가 발생했습니다: {str(e)}",
-            "timestamp": datetime.now().isoformat()
-        }
+        return {"response": f"AI 분석 중 오류가 발생했습니다: {str(e)}"}
+
+@app.post("/api/agent/ask")
+async def ask_agent(query: dict):
+    text = query.get('text', '')
+    res = await get_ai_response(text)
+    return {
+        "response": res["response"],
+        "timestamp": datetime.now().isoformat()
+    }
 
 if __name__ == "__main__":
     import uvicorn
