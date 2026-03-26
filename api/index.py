@@ -70,20 +70,68 @@ async def get_team_data():
 async def get_system_status():
     return {"status": "Live", "cpu_usage": "12%", "memory_usage": "45%"}
 
+import google.generativeai as genai
+
+@app.post("/api/settings/save_key")
+async def save_key(data: dict):
+    key = data.get("key")
+    if not key:
+        return {"error": "Key is required"}, 400
+    
+    config = load_json("config.json") or {}
+    config["GOOGLE_API_KEY"] = key
+    
+    path = DATA_DIR / "config.json"
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(config, f, indent=4)
+        
+    return {"message": "Key saved successfully"}
+
 @app.post("/api/agent/ask")
 async def ask_agent(query: dict):
     text = query.get('text', '')
-    if "매출" in text or "revenue" in text.lower():
-        response = "이번 달 총 매출은 $124,500이며 전월 대비 12.5% 상승했습니다."
-    elif "로아스" in text or "roas" in text.lower():
-        response = "평균 ROAS는 4.2x로 목표치인 4.0x를 상회하고 있습니다."
-    else:
-        response = f"질문하신 '{text}'에 대해 분석 중입니다. 캠페인 최적화 제안을 확인하시겠습니까?"
     
-    return {
-        "response": response,
-        "timestamp": datetime.now().isoformat()
-    }
+    config = load_json("config.json") or {}
+    api_key = config.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY")
+    
+    if not api_key:
+        return {
+            "response": "Gemini API 키가 설정되지 않았습니다. [설정] 메뉴에서 API 키를 먼저 등록해 주세요.",
+            "timestamp": datetime.now().isoformat()
+        }
+
+    try:
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel('gemini-pro')
+        
+        # Pull context from ERP data
+        stats = load_json("stats.json") or {}
+        campaigns = load_json("campaigns.json") or []
+        
+        prompt = f"""
+        당신은 AdVantage AI ERP의 전문 비즈니스 분석가입니다. 
+        사용자의 질문에 현재의 비즈니스 데이터를 바탕으로 전문적이고 친절하게 답변해 주세요.
+        
+        현재 데이터 요약:
+        - 매출: {stats.get('revenue', {}).get('value', 'N/A')} ({stats.get('revenue', {}).get('trend', '')})
+        - ROAS: {stats.get('avg_roas', {}).get('value', 'N/A')}
+        - 활성 캠페인 수: {len(campaigns)}
+        
+        사용자 질문: {text}
+        
+        전문적인 금융/마케팅 톤으로 답변해 주세요. 한국어로 답변해 주세요.
+        """
+        
+        response = model.generate_content(prompt)
+        return {
+            "response": response.text,
+            "timestamp": datetime.now().isoformat()
+        }
+    except Exception as e:
+        return {
+            "response": f"Gemini 엔진 호출 중 오류가 발생했습니다: {str(e)}",
+            "timestamp": datetime.now().isoformat()
+        }
 
 if __name__ == "__main__":
     import uvicorn
