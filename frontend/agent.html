@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}AI Agent - AdVantage AI{% endblock %}
+
+{% block head %}
+<style>
+    .glass-morphism {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="flex flex-col h-screen overflow-hidden">
+    <!-- Conversation Header -->
+    <header class="flex items-center justify-between px-8 py-6 border-b border-outline-variant/10 bg-white/50 backdrop-blur-md sticky top-0 z-30">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary group transition-all hover:bg-primary hover:text-white">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+            </div>
+            <div>
+                <h1 class="text-xl font-black text-on-surface">AdVantage AI 어시스턴트</h1>
+                <p class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#14B8A6]"></span> 실시간 지원 및 분석 중
+                </p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <button class="flex items-center gap-2 px-4 py-2 bg-surface-container-high rounded-xl text-xs font-bold text-on-surface-variant hover:bg-primary hover:text-white transition-all">
+                <span class="material-symbols-outlined text-sm">history</span> 히스토리
+            </button>
+            <button class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl text-xs font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+                <span class="material-symbols-outlined text-sm">add</span> 새 대화
+            </button>
+        </div>
+    </header>
+
+    <!-- Chat Area -->
+    <div class="flex-1 overflow-y-auto p-8 space-y-8 pb-32" id="chat-history">
+        <!-- AI Welcome Message -->
+        <div class="flex items-start gap-4 max-w-3xl">
+            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-primary/20">
+                <span class="material-symbols-outlined text-sm">auto_awesome</span>
+            </div>
+            <div class="bg-white p-6 rounded-2xl rounded-tl-none shadow-sm border border-outline-variant/5">
+                <p class="text-sm font-medium leading-relaxed text-on-surface">
+                    안녕하세요, JW님! AdVantage AI 어시스턴트입니다. 오늘은 캠페인 성과 분석이나 리소스 최적화에 대해 무엇을 도와드릴까요?
+                </p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <button class="px-3 py-1.5 bg-surface-container-low rounded-lg text-[11px] font-bold text-primary hover:bg-primary hover:text-white transition-all">"어제 자 광고 수익률 리포트 보여줘"</button>
+                    <button class="px-3 py-1.5 bg-surface-container-low rounded-lg text-[11px] font-bold text-primary hover:bg-primary hover:text-white transition-all">"Lumina Tech 캠페인 예산 조정 제안해줘"</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Message Mock -->
+        <div class="flex items-start gap-4 max-w-3xl ml-auto flex-row-reverse">
+            <div class="w-10 h-10 bg-primary-container rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-primary-container/20">
+                <span class="material-symbols-outlined text-sm">person</span>
+            </div>
+            <div class="bg-primary text-white p-6 rounded-2xl rounded-tr-none shadow-lg">
+                <p class="text-sm font-medium leading-relaxed">
+                    이번 달 전체 광고 집행 비용과 평균 CPA 변화 추이를 알고 싶어.
+                </p>
+            </div>
+        </div>
+
+        <!-- AI Response Mock -->
+        <div class="flex items-start gap-4 max-w-4xl">
+            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-primary/20">
+                <span class="material-symbols-outlined text-sm">auto_awesome</span>
+            </div>
+            <div class="bg-white p-6 rounded-2xl rounded-tl-none shadow-sm border border-outline-variant/5 w-full">
+                <p class="text-sm font-medium leading-relaxed text-on-surface mb-6">
+                    네, 분석 결과 이번 달 총 광고 집행 비용은 <span class="font-bold text-primary">$42,850</span>으로 전월 대비 <span class="text-[#14B8A6] font-bold">5.2% 상승</span>했습니다. 평균 CPA는 <span class="font-bold text-primary">$34.33</span>으로 <span class="text-[#14B8A6] font-bold">2.1% 개선</span>된 상태입니다.
+                </p>
+                <!-- Sample Chart/Metric Grid -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-surface-container-low p-4 rounded-xl">
+                        <p class="text-[9px] font-black uppercase tracking-tighter text-on-surface-variant">Total Spend</p>
+                        <p class="text-lg font-black text-primary">$42.8k</p>
+                    </div>
+                    <div class="bg-surface-container-low p-4 rounded-xl">
+                        <p class="text-[9px] font-black uppercase tracking-tighter text-on-surface-variant">Avg. CPA</p>
+                        <p class="text-lg font-black text-tertiary">$34.3</p>
+                    </div>
+                    <div class="bg-surface-container-low p-4 rounded-xl border border-primary/20 bg-primary/5">
+                        <p class="text-[9px] font-black uppercase tracking-tighter text-primary">ROAS Goal</p>
+                        <p class="text-lg font-black text-primary">4.5x</p>
+                    </div>
+                    <div class="bg-surface-container-low p-4 rounded-xl">
+                        <p class="text-[9px] font-black uppercase tracking-tighter text-on-surface-variant">Conversion Rate</p>
+                        <p class="text-lg font-black text-tertiary">3.2%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suggested Actions -->
+    <div class="fixed bottom-28 left-64 right-0 px-8 flex justify-center gap-3 z-40 pointer-events-none">
+        <button class="pointer-events-auto px-4 py-2 bg-white rounded-full text-xs font-medium text-primary hover:bg-primary hover:text-white transition-all shadow-sm border border-primary/5">
+            "Nexus 캠페인 예산 최적화해줘"
+        </button>
+        <button class="pointer-events-auto px-4 py-2 bg-white rounded-full text-xs font-medium text-primary hover:bg-primary hover:text-white transition-all shadow-sm border border-primary/5">
+            "재무 대시보드 업데이트해줘"
+        </button>
+    </div>
+
+    <!-- Central AI Input -->
+    <div class="fixed bottom-10 left-64 right-0 px-8 max-w-5xl mx-auto z-50">
+        <div class="relative group">
+            <div class="absolute inset-0 bg-primary/10 blur-2xl rounded-full transition-all group-focus-within:bg-primary/20"></div>
+            <div class="relative flex items-center bg-white rounded-2xl p-2 shadow-2xl shadow-primary/10 border border-primary-container/10">
+                <div class="flex items-center px-4">
+                    <span class="material-symbols-outlined text-primary">attachment</span>
+                </div>
+                <input id="chat-input"
+                    class="flex-1 bg-transparent border-none py-4 text-base font-medium focus:ring-0 placeholder:text-outline/60 text-on-surface"
+                    placeholder="비즈니스에 관해 무엇이든 물어보세요..." type="text" />
+                <button id="send-button"
+                    class="bg-gradient-to-br from-primary to-primary-container w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+                    <span class="material-symbols-outlined">send</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const chatInput = document.getElementById('chat-input');
+    const sendButton = document.getElementById('send-button');
+    const chatHistory = document.getElementById('chat-history');
+
+    function appendMessage(text, isUser = false) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = isUser 
+            ? "flex items-start gap-4 max-w-3xl ml-auto flex-row-reverse" 
+            : "flex items-start gap-4 max-w-3xl";
+        
+        const icon = isUser ? 'person' : 'auto_awesome';
+        const bgColor = isUser ? 'bg-primary text-white' : 'bg-white text-on-surface border border-outline-variant/5';
+        const shadow = isUser ? 'shadow-lg' : 'shadow-sm';
+        
+        msgDiv.innerHTML = `
+            <div class="w-10 h-10 ${isUser ? 'bg-primary-container' : 'bg-primary'} rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg">
+                <span class="material-symbols-outlined text-sm">${icon}</span>
+            </div>
+            <div class="${bgColor} p-6 rounded-2xl ${isUser ? 'rounded-tr-none' : 'rounded-tl-none'} ${shadow}">
+                <p class="text-sm font-medium leading-relaxed">${text}</p>
+            </div>
+        `;
+        chatHistory.appendChild(msgDiv);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
+    async function handleSend() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        chatInput.value = '';
+        appendMessage(text, true);
+
+        try {
+            const response = await fetch('/api/agent/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+            const data = await response.json();
+            
+            // Add a small delay for "thinking" feel
+            setTimeout(() => {
+                appendMessage(data.response, false);
+            }, 600);
+
+        } catch (err) {
+            console.error('Failed to ask AI:', err);
+            appendMessage("죄송합니다. 오류가 발생했습니다. 다시 시도해주세요.", false);
+        }
+    }
+
+    sendButton.addEventListener('click', handleSend);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleSend();
+    });
+</script>
+{% endblock %}

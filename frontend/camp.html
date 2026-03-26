@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Campaign Performance - AdVantage AI{% endblock %}
+
+{% block content %}
+<div class="p-10 space-y-10">
+    <header class="flex justify-between items-end">
+        <div>
+            <h1 class="text-3xl font-extrabold tracking-tight text-on-surface dark:text-white">캠페인 성과 분석</h1>
+            <p class="text-on-surface-variant dark:text-slate-400 mt-1 font-medium">실시간 채널별 광고 퍼포먼스 지표입니다.</p>
+        </div>
+        <div class="flex gap-4">
+            <button class="bg-surface-container-high dark:bg-slate-900 px-6 py-2 rounded-xl text-sm font-bold border border-outline-variant/10">CSV 내보내기</button>
+            <button class="bg-primary text-white px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform">새 캠페인 생성</button>
+        </div>
+    </header>
+
+    <!-- KPI Grid -->
+    <section class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-outline-variant/5 border-b-4 border-primary">
+            <p class="text-[10px] font-bold text-on-surface-variant dark:text-slate-400 uppercase tracking-widest">총 지출액</p>
+            <h3 id="camp-total-spend" class="text-2xl font-black mt-1">---</h3>
+            <p id="camp-total-spend-trend" class="text-[11px] text-[#14B8A6] font-bold mt-2 flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">trending_up</span> ---
+            </p>
+        </div>
+        <div class="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-outline-variant/5 border-b-4 border-tertiary">
+            <p class="text-[10px] font-bold text-on-surface-variant dark:text-slate-400 uppercase tracking-widest">평균 ROAS</p>
+            <h3 id="camp-avg-roas" class="text-2xl font-black mt-1">---</h3>
+            <p id="camp-avg-roas-trend" class="text-[11px] text-error font-bold mt-2 flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">trending_down</span> ---
+            </p>
+        </div>
+        <div class="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-outline-variant/5 border-b-4 border-primary">
+            <p class="text-[10px] font-bold text-on-surface-variant dark:text-slate-400 uppercase tracking-widest">전환 수</p>
+            <h3 id="camp-total-conversions" class="text-2xl font-black mt-1">---</h3>
+            <p id="camp-total-conversions-trend" class="text-[11px] text-[#14B8A6] font-bold mt-2 flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">trending_up</span> ---
+            </p>
+        </div>
+        <div class="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-outline-variant/5 border-b-4 border-tertiary">
+            <p class="text-[10px] font-bold text-on-surface-variant dark:text-slate-400 uppercase tracking-widest">평균 전환 단가 (CPA)</p>
+            <h3 id="camp-avg-cpa" class="text-2xl font-black mt-1">---</h3>
+            <p id="camp-avg-cpa-trend" class="text-[11px] text-[#14B8A6] font-bold mt-2 flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">trending_down</span> ---
+            </p>
+        </div>
+    </section>
+
+    <!-- Campaigns Table -->
+    <section class="bg-surface-container-lowest dark:bg-slate-900 rounded-3xl shadow-sm overflow-hidden border border-outline-variant/5">
+        <div class="p-6 border-b border-outline-variant/10 flex justify-between items-center">
+            <h2 class="font-bold text-lg">활성 캠페인 리스트</h2>
+            <div class="flex gap-4">
+                <input type="text" placeholder="캠페인 검색..." class="bg-surface-container-low dark:bg-slate-800 border-none rounded-xl text-xs px-4 py-2 w-64 focus:ring-primary">
+            </div>
+        </div>
+        <table class="w-full text-left text-sm">
+            <thead class="bg-surface-container-low dark:bg-slate-800 text-on-surface-variant dark:text-slate-400 text-[10px] uppercase font-bold tracking-widest">
+                <tr>
+                    <th class="px-8 py-4">캠페인 이름</th>
+                    <th class="px-8 py-4">채널</th>
+                    <th class="px-8 py-4">지출액</th>
+                    <th class="px-8 py-4">수익률</th>
+                    <th class="px-8 py-4">상태</th>
+                </tr>
+            </thead>
+            <tbody id="campaign-table-body" class="divide-y divide-outline-variant/5">
+                <!-- Rows will be loaded here -->
+                <tr>
+                    <td colspan="5" class="px-8 py-10 text-center text-on-surface-variant font-medium">데이터를 불러오는 중...</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    async function fetchCampaigns() {
+        try {
+            // Fetch Dashboard Stats for the KPI cards (reusing the same logic)
+            const statsResp = await fetch('/api/dashboard/stats');
+            const stats = await statsResp.json();
+            
+            document.getElementById('camp-total-spend').innerText = stats.revenue.value; // Using revenue value as placeholder for total spend
+            document.getElementById('camp-total-spend-trend').innerHTML = `<span class="material-symbols-outlined text-xs">trending_up</span> ${stats.revenue.trend}`;
+            
+            document.getElementById('camp-avg-roas').innerText = stats.avg_roas.value;
+            document.getElementById('camp-avg-roas-trend').innerHTML = `<span class="material-symbols-outlined text-xs">trending_down</span> ${stats.avg_roas.trend}`;
+
+            document.getElementById('camp-total-conversions').innerText = "1,248";
+            document.getElementById('camp-total-conversions-trend').innerHTML = `<span class="material-symbols-outlined text-xs">trending_up</span> +12%`;
+
+            document.getElementById('camp-avg-cpa').innerText = "$34.33";
+            document.getElementById('camp-avg-cpa-trend').innerHTML = `<span class="material-symbols-outlined text-xs">trending_down</span> -2.1%`;
+
+            // Fetch Campaign List
+            const campResp = await fetch('/api/campaigns');
+            const campaigns = await campResp.json();
+            const tableBody = document.getElementById('campaign-table-body');
+            tableBody.innerHTML = '';
+            
+            campaigns.forEach(camp => {
+                const statusColor = camp.status === 'warning' ? 'bg-error' : 'bg-[#14B8A6]';
+                const statusText = camp.status === 'warning' ? '경고' : '활성';
+                const roasColor = camp.status === 'warning' ? 'text-error' : 'text-tertiary';
+                
+                tableBody.innerHTML += `
+                <tr class="hover:bg-primary/[0.02] transition-colors">
+                    <td class="px-8 py-4 font-bold">${camp.name}</td>
+                    <td class="px-8 py-4">
+                        <span class="px-2 py-1 bg-surface-container-high dark:bg-slate-800 text-on-surface-variant rounded text-[10px] font-bold uppercase">
+                            ${camp.channel}
+                        </span>
+                    </td>
+                    <td class="px-8 py-4">${camp.spend}</td>
+                    <td class="px-8 py-4 font-bold ${roasColor}">${camp.roas}</td>
+                    <td class="px-8 py-4">
+                        <span class="w-2 h-2 rounded-full ${statusColor} inline-block mr-2"></span> ${statusText}
+                    </td>
+                </tr>`;
+            });
+
+        } catch (err) {
+            console.error('Failed to fetch campaign data:', err);
+        }
+    }
+
+    fetchCampaigns();
+</script>
+{% endblock %}

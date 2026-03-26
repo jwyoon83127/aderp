@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Team & Resources - AdVantage AI{% endblock %}
+
+{% block content %}
+<div class="p-10 space-y-10">
+    <header class="flex justify-between items-end">
+        <div>
+            <h1 class="text-3xl font-extrabold tracking-tight text-on-surface dark:text-white">팀 및 리소스 관리</h1>
+            <p class="text-on-surface-variant dark:text-slate-400 mt-1 font-medium">에이전시 인재 및 AI 컴퓨팅 자원을 관리하고 최적화하세요.</p>
+        </div>
+        <button class="bg-primary text-white px-6 py-2 rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+            멤버 추가
+        </button>
+    </header>
+
+    <!-- Resource Overview -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-outline-variant/10">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined">memory</span>
+                </div>
+                <div>
+                    <h3 class="font-bold">AI 컴퓨팅</h3>
+                    <p class="text-[10px] text-on-surface-variant dark:text-slate-400 font-bold uppercase tracking-widest">가동 효율 상태</p>
+                </div>
+            </div>
+            <div class="relative h-2 w-full bg-surface-container-high rounded-full overflow-hidden mb-4">
+                <div id="resource-compute-bar" class="absolute top-0 left-0 h-full bg-primary rounded-full transition-all duration-1000" style="width: 0%;"></div>
+            </div>
+            <div class="flex justify-between text-xs font-bold">
+                <span id="resource-compute-text" class="text-on-surface-variant dark:text-slate-400">--- 사용 중</span>
+                <span id="resource-compute-trend" class="text-primary">---</span>
+            </div>
+        </div>
+
+        <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-outline-variant/10">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 bg-tertiary/10 rounded-2xl flex items-center justify-center text-tertiary">
+                    <span class="material-symbols-outlined">group_work</span>
+                </div>
+                <div>
+                    <h3 class="font-bold">팀 가용 업무량</h3>
+                    <p class="text-[10px] text-on-surface-variant dark:text-slate-400 font-bold uppercase tracking-widest">현재 가용성</p>
+                </div>
+            </div>
+            <div class="relative h-2 w-full bg-surface-container-high rounded-full overflow-hidden mb-4">
+                <div id="resource-bandwidth-bar" class="absolute top-0 left-0 h-full bg-tertiary rounded-full transition-all duration-1000" style="width: 0%;"></div>
+            </div>
+            <div class="flex justify-between text-xs font-bold">
+                <span id="resource-bandwidth-text" class="text-on-surface-variant dark:text-slate-400">--- 가동 중</span>
+                <span class="text-error">업무 부하 높음</span>
+            </div>
+        </div>
+
+        <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-outline-variant/10">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined">monetization_on</span>
+                </div>
+                <div>
+                    <h3 class="font-bold">리소스 ROI</h3>
+                    <p class="text-[10px] text-on-surface-variant dark:text-slate-400 font-bold uppercase tracking-widest">전월 대비 성장</p>
+                </div>
+            </div>
+            <div class="flex items-end gap-2">
+                <h4 id="resource-roi" class="text-3xl font-black text-on-surface dark:text-white">$---</h4>
+                <p class="text-xs font-bold text-on-surface-variant dark:text-slate-400 mb-1.5">$1 지출당 수익</p>
+            </div>
+            <p class="text-[11px] text-[#14B8A6] font-bold mt-4 flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">trending_up</span> AI 최적화 완료
+            </p>
+        </div>
+    </section>
+
+    <!-- Team Members List -->
+    <section class="bg-surface-container-lowest dark:bg-slate-900 rounded-3xl shadow-sm border border-outline-variant/5 overflow-hidden">
+        <div class="px-8 py-6 border-b border-outline-variant/10 flex justify-between items-center">
+            <h2 class="font-bold text-lg">인재 디렉토리</h2>
+            <div class="flex gap-2">
+                <button class="w-10 h-10 bg-surface-container-high dark:bg-slate-800 rounded-xl flex items-center justify-center text-on-surface-variant hover:text-primary transition-all">
+                    <span class="material-symbols-outlined">search</span>
+                </button>
+                <button class="w-10 h-10 bg-surface-container-high dark:bg-slate-800 rounded-xl flex items-center justify-center text-on-surface-variant hover:text-primary transition-all">
+                    <span class="material-symbols-outlined">filter_list</span>
+                </button>
+            </div>
+        </div>
+        <div id="member-list" class="divide-y divide-outline-variant/5">
+            <!-- Members will be loaded here -->
+            <div class="px-8 py-10 text-center text-on-surface-variant font-medium">데이터를 불러오는 중...</div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    async function fetchTeamData() {
+        try {
+            const resp = await fetch('/api/team');
+            const data = await resp.json();
+            
+            // Update Resources
+            document.getElementById('resource-compute-bar').style.width = data.resources.compute.value + '%';
+            document.getElementById('resource-compute-text').innerText = data.resources.compute.value + '% 사용 중';
+            document.getElementById('resource-compute-trend').innerText = '지난주 대비 ' + data.resources.compute.trend;
+            
+            document.getElementById('resource-bandwidth-bar').style.width = data.resources.bandwidth.value + '%';
+            document.getElementById('resource-bandwidth-text').innerText = data.resources.bandwidth.value + '% 가동 중';
+            
+            document.getElementById('resource-roi').innerText = data.resources.roi.value;
+
+            // Update Members
+            const memberList = document.getElementById('member-list');
+            memberList.innerHTML = '';
+            
+            data.members.forEach(member => {
+                const initials = member.name.substring(0, 1) + (member.name.length > 1 ? member.name.substring(member.name.length - 1) : '');
+                const bgColors = ['bg-indigo-100', 'bg-rose-100', 'bg-amber-100', 'bg-emerald-100'];
+                const textColors = ['text-indigo-600', 'text-rose-600', 'text-amber-600', 'text-emerald-600'];
+                const randIdx = Math.floor(Math.random() * bgColors.length);
+                
+                memberList.innerHTML += `
+                <div class="px-8 py-6 flex items-center justify-between group hover:bg-primary/[0.02] transition-all cursor-pointer">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl ${bgColors[randIdx]} flex items-center justify-center ${textColors[randIdx]} font-bold border-2 border-white shadow-md group-hover:scale-110 transition-transform">
+                            ${initials}
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm">${member.name}</h4>
+                            <p class="text-xs text-on-surface-variant dark:text-slate-400 font-medium">${member.role}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-12 text-center">
+                        <div>
+                            <p class="text-[10px] font-bold text-on-surface-variant dark:text-slate-400 uppercase tracking-tighter">담당 자산</p>
+                            <p class="text-sm font-black text-on-surface dark:text-white mt-1">${member.clients || member.projects}개</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-on-surface-variant dark:text-slate-400 uppercase tracking-tighter">성과 점수</p>
+                            <p class="text-sm font-black text-tertiary mt-1">${member.score} / 100</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <div class="px-3 py-1 bg-surface-container-low dark:bg-slate-800 rounded-lg text-[10px] font-bold text-on-surface-variant dark:text-slate-400">${member.tag}</div>
+                        <div class="px-3 py-1 bg-[#14B8A6]/10 rounded-lg text-[10px] font-bold text-[#14B8A6]">${member.status}</div>
+                    </div>
+                </div>`;
+            });
+
+        } catch (err) {
+            console.error('Failed to fetch team data:', err);
+        }
+    }
+
+    fetchTeamData();
+</script>
+{% endblock %}
+    </section>
+</div>
+{% endblock %}
