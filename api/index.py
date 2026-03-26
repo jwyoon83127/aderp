@@ -1,4 +1,5 @@
 import os
+import json
 from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
@@ -8,13 +9,15 @@ from datetime import datetime
 
 app = FastAPI(title="AdVantage AI ERP")
 
-import json
-
 # Root directory discovery for Vercel/Local
 BASE_DIR = Path(__file__).resolve().parent
 ROOT_DIR = BASE_DIR.parent
 FRONTEND_DIR = ROOT_DIR / "frontend"
 DATA_DIR = ROOT_DIR / "data"
+
+# Serve static files
+app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
+templates = Jinja2Templates(directory=str(FRONTEND_DIR))
 
 def load_json(filename):
     path = DATA_DIR / filename
@@ -24,7 +27,22 @@ def load_json(filename):
     return None
 
 # --- Page Routes ---
-# ... (omitted for brevity in replacement, but I will keep them)
+
+@app.get("/", response_class=HTMLResponse)
+async def read_dashboard(request: Request):
+    return templates.TemplateResponse(request=request, name="index.html")
+
+@app.get("/agent", response_class=HTMLResponse)
+async def read_agent(request: Request):
+    return templates.TemplateResponse(request=request, name="agent.html")
+
+@app.get("/team", response_class=HTMLResponse)
+async def read_team(request: Request):
+    return templates.TemplateResponse(request=request, name="team.html")
+
+@app.get("/camp", response_class=HTMLResponse)
+async def read_campaigns(request: Request):
+    return templates.TemplateResponse(request=request, name="camp.html")
 
 # --- Dynamic Data API Endpoints ---
 
@@ -51,7 +69,6 @@ async def get_system_status():
 @app.post("/api/agent/ask")
 async def ask_agent(query: dict):
     text = query.get('text', '')
-    # Simple semantic response logic
     if "매출" in text or "revenue" in text.lower():
         response = "이번 달 총 매출은 $124,500이며 전월 대비 12.5% 상승했습니다."
     elif "로아스" in text or "roas" in text.lower():
