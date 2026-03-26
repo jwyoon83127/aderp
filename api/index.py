@@ -1,11 +1,10 @@
 import os
+from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from datetime import datetime
-
-from pathlib import Path
 
 app = FastAPI(title="AdVantage AI ERP")
 
@@ -20,37 +19,27 @@ app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
 
 templates = Jinja2Templates(directory=str(FRONTEND_DIR))
 
-def render_diagnostic(name: str, request: Request):
-    try:
-        return templates.TemplateResponse(request=request, name=name)
-    except Exception as e:
-        import traceback
-        return HTMLResponse(
-            content=f"<h3>Error rendering {name}:</h3><pre>{traceback.format_exc()}</pre>", 
-            status_code=500
-        )
-
 # --- Page Routes ---
 
 @app.get("/", response_class=HTMLResponse)
 async def read_dashboard(request: Request):
     """CEO Dashboard"""
-    return render_diagnostic("index.html", request)
+    return templates.TemplateResponse(request=request, name="index.html")
 
 @app.get("/agent", response_class=HTMLResponse)
 async def read_agent(request: Request):
     """AI Agent Interface"""
-    return render_diagnostic("agent.html", request)
+    return templates.TemplateResponse(request=request, name="agent.html")
 
 @app.get("/team", response_class=HTMLResponse)
 async def read_team(request: Request):
     """Team & Resources"""
-    return render_diagnostic("team.html", request)
+    return templates.TemplateResponse(request=request, name="team.html")
 
 @app.get("/camp", response_class=HTMLResponse)
 async def read_campaigns(request: Request):
     """Campaign Performance Monitoring"""
-    return render_diagnostic("camp.html", request)
+    return templates.TemplateResponse(request=request, name="camp.html")
 
 # --- Dynamic Data API Endpoints ---
 
