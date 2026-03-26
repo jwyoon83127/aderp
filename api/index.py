@@ -25,26 +25,22 @@ templates = Jinja2Templates(directory=FRONTEND_DIR)
 @app.get("/", response_class=HTMLResponse)
 async def read_dashboard(request: Request):
     """CEO Dashboard"""
-    try:
-        return templates.TemplateResponse("index.html", {"request": request})
-    except Exception as e:
-        import traceback
-        return HTMLResponse(content=f"<h3>Error loading index.html:</h3><pre>{traceback.format_exc()}</pre>", status_code=500)
+    return templates.TemplateResponse(request=request, name="index.html")
 
 @app.get("/agent", response_class=HTMLResponse)
 async def read_agent(request: Request):
     """AI Agent Interface"""
-    return templates.TemplateResponse("agent.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="agent.html")
 
 @app.get("/team", response_class=HTMLResponse)
 async def read_team(request: Request):
     """Team & Resources"""
-    return templates.TemplateResponse("team.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="team.html")
 
 @app.get("/camp", response_class=HTMLResponse)
 async def read_campaigns(request: Request):
     """Campaign Performance Monitoring"""
-    return templates.TemplateResponse("camp.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="camp.html")
 
 # --- Dynamic Data API Endpoints ---
 
