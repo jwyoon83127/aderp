@@ -1,4 +1,3 @@
-# AdVantage AI ERP - Vercel Deployment Trigger: 2026-03-26T16:45:00
 import os
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
@@ -8,9 +7,12 @@ from datetime import datetime
 
 app = FastAPI(title="AdVantage AI ERP")
 
-# Get the absolute path of the current file (main.py)
-# Root deployment for Vercel
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+# Get the absolute path of the root directory
+# __file__ is /var/task/api/index.py
+# parent is /var/task/api
+# grandparent is /var/task (the project root)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(CURRENT_DIR)
 FRONTEND_DIR = os.path.join(ROOT_DIR, "frontend")
 
 # Serve static files (HTML, CSS, images if any)
