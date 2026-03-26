@@ -87,6 +87,27 @@ async def save_key(data: dict):
         
     return {"message": "Key saved successfully"}
 
+@app.post("/api/settings/save_ad_keys")
+async def save_ad_keys(data: dict):
+    config = load_json("config.json") or {}
+    config["AD_CHANNELS"] = {
+        "meta": {
+            "token": data.get("meta_token"),
+            "account_id": data.get("meta_account")
+        },
+        "google": {
+            "dev_token": data.get("google_token"),
+            "customer_id": data.get("google_id")
+        }
+    }
+    
+    path = DATA_DIR / "config.json"
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(config, f, indent=4)
+    
+    # Trigger a mock data sync (re-randomize mock data for now)
+    return {"message": "Credentials saved. Initializing data sync..."}
+
 @app.post("/api/kakao/ask")
 async def kakao_ask(request: Request):
     try:

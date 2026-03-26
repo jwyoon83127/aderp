@@ -74,6 +74,53 @@
                 </div>
             </div>
 
+            <!-- Ad Channel Integration (Meta/Google Ads) -->
+            <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-outline-variant/10">
+                <h2 class="font-bold text-lg mb-6 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">ads_click</span> 광고 채널 연동 (Ads API)
+                </h2>
+                <div class="space-y-10">
+                    <!-- Meta/Facebook -->
+                    <div class="space-y-4">
+                        <h3 class="flex items-center gap-2 text-sm font-black">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="w-4 h-4" alt="Meta"> Meta (Facebook) Ads
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="text-[9px] font-black uppercase text-on-surface-variant ml-1">Access Token</label>
+                                <input type="password" id="meta-token" placeholder="EAA..." class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-xs font-bold focus:ring-primary">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[9px] font-black uppercase text-on-surface-variant ml-1">Ad Account ID</label>
+                                <input type="text" id="meta-account-id" placeholder="act_..." class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-xs font-bold focus:ring-primary">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Google Ads -->
+                    <div class="space-y-4">
+                        <h3 class="flex items-center gap-2 text-sm font-black">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Google_Ads_logo.svg" class="w-4 h-4" alt="Google"> Google Ads
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="text-[9px] font-black uppercase text-on-surface-variant ml-1">Developer Token</label>
+                                <input type="password" id="google-dev-token" placeholder="Dev Token" class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-xs font-bold focus:ring-primary">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[9px] font-black uppercase text-on-surface-variant ml-1">Customer ID</label>
+                                <input type="text" id="google-customer-id" placeholder="123-456-7890" class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-xs font-bold focus:ring-primary">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="saveAdKeys()" class="w-full bg-on-surface text-surface py-4 rounded-2xl font-black text-sm hover:scale-[1.01] transition-transform flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-sm">cloud_sync</span> 광고 API 정보 저장 및 데이터 동기화
+                    </button>
+                    <p class="text-[9px] text-center text-on-surface-variant font-bold">* 입력하신 정보는 `data/config.json`에 암호화되지 않은 채로 보관되오니 보안에 유의하세요.</p>
+                </div>
+            </div>
+
             <!-- AI Configuration -->
             <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-outline-variant/10">
                 <h2 class="font-bold text-lg mb-6 flex items-center gap-2">
@@ -169,6 +216,32 @@
         } catch (error) {
             console.error('Error saving key:', error);
             alert('서버와 연결할 수 없습니다.');
+        }
+    }
+
+    async function saveAdKeys() {
+        const payload = {
+            meta_token: document.getElementById('meta-token').value,
+            meta_account: document.getElementById('meta-account-id').value,
+            google_token: document.getElementById('google-dev-token').value,
+            google_id: document.getElementById('google-customer-id').value
+        };
+
+        try {
+            const response = await fetch('/api/settings/save_ad_keys', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            
+            if (response.ok) {
+                alert('광고 채널 API 정보가 저장되었습니다. 데이터 분석을 시작합니다.');
+            } else {
+                alert('오류: ' + data.error);
+            }
+        } catch (error) {
+            alert('연동 실패: 서버를 확인하세요.');
         }
     }
 </script>
