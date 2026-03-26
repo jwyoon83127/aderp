@@ -25,7 +25,11 @@ templates = Jinja2Templates(directory=FRONTEND_DIR)
 @app.get("/", response_class=HTMLResponse)
 async def read_dashboard(request: Request):
     """CEO Dashboard"""
-    return templates.TemplateResponse("index.html", {"request": request})
+    try:
+        return templates.TemplateResponse("index.html", {"request": request})
+    except Exception as e:
+        import traceback
+        return HTMLResponse(content=f"<h3>Error loading index.html:</h3><pre>{traceback.format_exc()}</pre>", status_code=500)
 
 @app.get("/agent", response_class=HTMLResponse)
 async def read_agent(request: Request):
