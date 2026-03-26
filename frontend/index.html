@@ -1,133 +1,128 @@
 {% extends "base.html" %}
 
-{% block title %}Integrated Dashboard - AdVantage AI{% endblock %}
+{% block title %}통합 대시보드 - AdVantage AI{% endblock %}
 
 {% block head %}
 <style>
-    .chat-container { height: calc(100vh - 350px); min-height: 400px; }
+    .chat-viewport { height: calc(100vh - 180px); }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e7ff; border-radius: 10px; }
+    .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(0, 74, 198, 0.1); }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="p-8 space-y-8">
-    <!-- Header -->
-    <header class="flex justify-between items-end">
-        <div>
-            <h1 class="text-2xl font-black tracking-tight text-on-surface dark:text-white">통합 비즈니스 대시보드</h1>
-            <p class="text-on-surface-variant dark:text-slate-400 mt-1 text-sm font-medium">실시간 성과 모니터링 및 AI 전략 지원</p>
-        </div>
-        <div class="flex gap-4">
-            <div class="bg-surface-container-low dark:bg-slate-900 px-4 py-2 rounded-xl border border-outline-variant/10">
-                <div class="flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-[#14B8A6] animate-pulse"></span>
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">시스템 정상</span>
+<div class="flex h-screen overflow-hidden bg-surface dark:bg-slate-950">
+    <!-- Main Chat Area (Centered Command Center) -->
+    <section class="flex-1 flex flex-col relative px-8">
+        <!-- Chat Header -->
+        <header class="py-6 flex justify-between items-center border-b border-outline-variant/5">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black text-on-surface">AI 비즈니스 파트너</h1>
+                    <p class="text-[10px] text-[#14B8A6] font-bold uppercase tracking-widest flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#14B8A6] animate-pulse"></span> 전략 분석 엔진 가동 중
+                    </p>
                 </div>
             </div>
-            <button class="bg-primary text-white px-5 py-2 rounded-xl font-bold text-xs shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
-                성과 리포트
+            <button class="text-on-surface-variant hover:text-primary transition-colors">
+                <span class="material-symbols-outlined">more_vert</span>
             </button>
-        </div>
-    </header>
+        </header>
 
-    <!-- KPI Grid -->
-    <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="bg-surface-container-lowest dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-outline-variant/5">
-            <p class="text-[9px] font-black text-on-surface-variant dark:text-slate-400 uppercase tracking-widest mb-1">총 매출액</p>
-            <h3 id="stat-revenue" class="text-xl font-black">---</h3>
-            <div id="stat-revenue-trend" class="text-[#14B8A6] text-[10px] font-black mt-1">---</div>
-        </div>
-        <div class="bg-surface-container-lowest dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-outline-variant/5">
-            <p class="text-[9px] font-black text-on-surface-variant dark:text-slate-400 uppercase tracking-widest mb-1">활성 클라이언트</p>
-            <h3 id="stat-clients" class="text-xl font-black">---</h3>
-            <div id="stat-clients-trend" class="text-[#14B8A6] text-[10px] font-black mt-1">---</div>
-        </div>
-        <div class="bg-surface-container-lowest dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-outline-variant/5">
-            <p class="text-[9px] font-black text-on-surface-variant dark:text-slate-400 uppercase tracking-widest mb-1">평균 ROAS</p>
-            <h3 id="stat-roas" class="text-xl font-black">---</h3>
-            <div id="stat-roas-trend" class="text-error text-[10px] font-black mt-1">---</div>
-        </div>
-        <div class="bg-surface-container-lowest dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-outline-variant/5">
-            <p class="text-[9px] font-black text-on-surface-variant dark:text-slate-400 uppercase tracking-widest mb-1">AI 효율</p>
-            <h3 id="stat-efficiency" class="text-xl font-black">---</h3>
-            <div id="stat-efficiency-trend" class="text-[#14B8A6] text-[10px] font-black mt-1">---</div>
-        </div>
-    </section>
-
-    <!-- Main Content Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <!-- Left: AI Agent Chat -->
-        <section class="lg:col-span-8 flex flex-col bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-outline-variant/10 overflow-hidden">
-            <div class="px-6 py-4 border-b border-outline-variant/5 bg-surface-container-lowest dark:bg-slate-800 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <span class="material-symbols-outlined text-primary">smart_toy</span>
-                    <h2 class="font-bold text-sm">AdVantage AI 전략 어시스턴트</h2>
+        <!-- Messages Viewport -->
+        <div id="chat-history" class="chat-viewport overflow-y-auto py-8 space-y-8 custom-scrollbar pb-32">
+            <!-- AI Welcome -->
+            <div class="flex items-start gap-4 max-w-3xl">
+                <div class="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-primary/20">
+                    <span class="material-symbols-outlined text-sm">auto_awesome</span>
                 </div>
-                <div class="flex gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#14B8A6]"></span>
-                    <span class="text-[10px] font-bold text-on-surface-variant">온라인</span>
-                </div>
-            </div>
-            
-            <!-- Chat Container -->
-            <div id="chat-history" class="chat-container overflow-y-auto p-6 space-y-6">
-                <!-- AI Message -->
-                <div class="flex items-start gap-3 max-w-2xl">
-                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white shrink-0 shadow-md shadow-primary/20">
-                        <span class="material-symbols-outlined text-sm">auto_awesome</span>
-                    </div>
-                    <div class="bg-surface-container-low dark:bg-slate-800 p-4 rounded-xl rounded-tl-none shadow-sm">
-                        <p class="text-sm font-medium leading-relaxed">
-                            반갑습니다, JW님! 오늘 대시보드 지표를 분석해 드릴까요? "이번 달 성과 요약해줘"라고 말씀해 보세요.
-                        </p>
+                <div class="glass-card p-6 rounded-3xl rounded-tl-none shadow-sm">
+                    <p class="text-sm font-semibold leading-relaxed text-on-surface">
+                        안녕하세요, JW님. 통합 대시보드에 오신 것을 환영합니다. <br>
+                        현재 캠페인 성과와 리소스 현황을 실시간으로 모니터링하고 있습니다. 궁금한 점이 있으신가요?
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <button class="px-3 py-1.5 bg-primary/5 rounded-lg text-[11px] font-bold text-primary hover:bg-primary hover:text-white transition-all border border-primary/10">"주요 로아스(ROAS) 현황 브리핑해줘"</button>
+                        <button class="px-3 py-1.5 bg-primary/5 rounded-lg text-[11px] font-bold text-primary hover:bg-primary hover:text-white transition-all border border-primary/10">"예산 최적화 제안해줘"</button>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Input Area -->
-            <div class="p-4 bg-surface-container-lowest dark:bg-slate-900 border-t border-outline-variant/5">
-                <div class="relative flex items-center">
-                    <input id="chat-input" 
-                        class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-3 pl-4 pr-12 text-sm font-medium focus:ring-1 focus:ring-primary transition-all" 
-                        placeholder="분석 질문을 입력하세요..." type="text" />
-                    <button id="send-button" class="absolute right-2 bg-primary text-white w-8 h-8 rounded-lg flex items-center justify-center shadow-md shadow-primary/20 hover:scale-105 transition-transform">
-                        <span class="material-symbols-outlined text-sm">send</span>
+        <!-- Float Input Bar -->
+        <div class="absolute bottom-8 left-8 right-8 max-w-4xl mx-auto z-50">
+            <div class="relative group">
+                <div class="absolute inset-0 bg-primary/10 blur-3xl rounded-full transition-all group-focus-within:bg-primary/20"></div>
+                <div class="relative flex items-center bg-white dark:bg-slate-900 rounded-3xl p-2 shadow-2xl border border-primary/10">
+                    <input id="chat-input"
+                        class="flex-1 bg-transparent border-none py-4 px-6 text-sm font-bold focus:ring-0 placeholder:text-outline/40"
+                        placeholder="전략 질문을 입력하세요..." type="text" />
+                    <button id="send-button"
+                        class="bg-primary w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+                        <span class="material-symbols-outlined">send</span>
                     </button>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Right Sidebar (Context & Insights) -->
+    <aside class="w-96 bg-surface-container-low dark:bg-slate-900 border-l border-outline-variant/10 p-8 flex flex-col gap-8 h-screen overflow-y-auto custom-scrollbar">
+        <h2 class="text-[11px] font-black uppercase tracking-[0.2em] text-on-surface-variant">실시간 비즈니스 지표</h2>
+        
+        <!-- Compact KPI Cards -->
+        <div class="space-y-4">
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-outline-variant/5">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-[10px] font-bold text-on-surface-variant uppercase">매출</p>
+                    <span id="stat-revenue-trend" class="text-[10px] font-bold text-[#14B8A6]">---</span>
+                </div>
+                <h3 id="stat-revenue" class="text-xl font-black text-on-surface dark:text-white">---</h3>
+            </div>
+            
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-outline-variant/5">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-[10px] font-bold text-on-surface-variant uppercase">평균 ROAS</p>
+                    <span id="stat-roas-trend" class="text-[10px] font-bold text-error">---</span>
+                </div>
+                <h3 id="stat-roas" class="text-xl font-black text-on-surface dark:text-white">---</h3>
+            </div>
+            
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-outline-variant/5">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-[10px] font-bold text-on-surface-variant uppercase">AI 효율</p>
+                    <span id="stat-efficiency-trend" class="text-[10px] font-bold text-primary">---</span>
+                </div>
+                <h3 id="stat-efficiency" class="text-xl font-black text-on-surface dark:text-white">---</h3>
+            </div>
+        </div>
+
+        <!-- AI Smart Insight Widget -->
+        <section class="bg-gradient-to-br from-primary to-primary-container rounded-2xl p-6 text-white shadow-lg shadow-primary/10">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="material-symbols-outlined text-sm text-white/60">bolt</span>
+                <p class="text-[10px] font-bold uppercase tracking-widest">Smart Insight</p>
+            </div>
+            <p class="text-xs font-bold leading-relaxed opacity-90">
+                Lumina Tech 캠페인의 전환 단가가 낮아지고 있습니다. 소재 확장을 검토하세요.
+            </p>
         </section>
 
-        <!-- Right: Insights & Campaigns -->
-        <aside class="lg:col-span-4 space-y-6">
-            <!-- AI Smart Insight -->
-            <section class="bg-gradient-to-br from-primary to-primary-container rounded-3xl p-6 text-white shadow-xl shadow-primary/10">
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="material-symbols-outlined text-white/50 text-sm">auto_awesome</span>
-                    <h2 class="font-bold text-sm">Real-time Insight</h2>
-                </div>
-                <p class="text-white/90 text-sm leading-relaxed font-medium">
-                    "최근 24시간 동안 소셜 미디어 광고 효율이 12% 상승했습니다. 특히 리타겟팅 캠페인의 ROAS가 눈에 띄게 개선되었습니다."
-                </p>
-                <button class="mt-4 w-full bg-white/10 hover:bg-white/20 py-2 rounded-lg backdrop-blur-md transition-all font-bold text-xs">상세 분석 실행</button>
-            </section>
-
-            <!-- Top Campaigns -->
-            <section class="bg-surface-container-lowest dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-outline-variant/5">
-                <div class="flex justify-between items-center mb-5">
-                    <h2 class="font-bold text-sm">주요 프로젝트 성능</h2>
-                    <span class="material-symbols-outlined text-on-surface-variant text-xs cursor-pointer hover:text-primary">trending_up</span>
-                </div>
-                <div id="campaign-list" class="space-y-4">
-                    <div class="animate-pulse flex items-center gap-3">
-                        <div class="w-10 h-10 bg-surface-container-high rounded-xl"></div>
-                        <div class="flex-1 space-y-2">
-                            <div class="h-2.5 bg-surface-container-high rounded w-1/2"></div>
-                            <div class="h-2 bg-surface-container-high rounded w-1/3"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </aside>
-    </div>
+        <!-- Top Projects Mini List -->
+        <section>
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-[11px] font-black uppercase tracking-[0.2em] text-on-surface-variant">성능 우수 프로젝트</h2>
+                <span class="material-symbols-outlined text-xs text-on-surface-variant">arrow_forward</span>
+            </div>
+            <div id="campaign-list" class="space-y-3">
+                <!-- Mini items -->
+            </div>
+        </section>
+    </aside>
 </div>
 {% endblock %}
 
@@ -140,18 +135,18 @@
     function appendMessage(text, isUser = false) {
         const msgDiv = document.createElement('div');
         msgDiv.className = isUser 
-            ? "flex items-start gap-3 max-w-2xl ml-auto flex-row-reverse" 
-            : "flex items-start gap-3 max-w-2xl";
+            ? "flex items-start gap-4 max-w-3xl ml-auto flex-row-reverse animate-in fade-in slide-in-from-right-4 duration-300" 
+            : "flex items-start gap-4 max-w-3xl animate-in fade-in slide-in-from-left-4 duration-300";
         
         const icon = isUser ? 'person' : 'auto_awesome';
-        const bgColor = isUser ? 'bg-primary text-white shadow-md' : 'bg-surface-container-low dark:bg-slate-800 text-on-surface shadow-sm';
+        const bgColor = isUser ? 'bg-primary text-white shadow-lg' : 'glass-card text-on-surface shadow-sm';
         
         msgDiv.innerHTML = `
-            <div class="w-8 h-8 ${isUser ? 'bg-primary-container' : 'bg-primary'} rounded-lg flex items-center justify-center text-white shrink-0 shadow-md">
+            <div class="w-10 h-10 ${isUser ? 'bg-primary-container' : 'bg-primary'} rounded-2xl flex items-center justify-center text-white shrink-0 shadow-lg">
                 <span class="material-symbols-outlined text-sm">${icon}</span>
             </div>
-            <div class="${bgColor} p-4 rounded-xl ${isUser ? 'rounded-tr-none' : 'rounded-tl-none'}">
-                <p class="text-sm font-medium leading-relaxed">${text}</p>
+            <div class="${bgColor} p-6 rounded-3xl ${isUser ? 'rounded-tr-none' : 'rounded-tl-none'}">
+                <p class="text-sm font-bold leading-relaxed">${text}</p>
             </div>
         `;
         chatHistory.appendChild(msgDiv);
@@ -175,11 +170,13 @@
             
             setTimeout(() => {
                 appendMessage(data.response, false);
-            }, 600);
+                // Also refresh stats when AI suggests something
+                fetchData();
+            }, 500);
 
         } catch (err) {
             console.error('Failed to ask AI:', err);
-            appendMessage("죄송합니다. 오류가 발생했습니다.", false);
+            appendMessage("분석 엔진 연결에 실패했습니다.", false);
         }
     }
 
@@ -189,33 +186,31 @@
             const stats = await statsResp.json();
             
             document.getElementById('stat-revenue').innerText = stats.revenue.value;
-            document.getElementById('stat-revenue-trend').innerHTML = `<span class="material-symbols-outlined text-xs inline-block align-text-bottom">trending_up</span> ${stats.revenue.trend}`;
-            
-            document.getElementById('stat-clients').innerText = stats.active_clients.value;
-            document.getElementById('stat-clients-trend').innerHTML = `<span class="material-symbols-outlined text-xs inline-block align-text-bottom">trending_up</span> ${stats.active_clients.trend}`;
+            document.getElementById('stat-revenue-trend').innerText = stats.revenue.trend;
             
             document.getElementById('stat-roas').innerText = stats.avg_roas.value;
-            document.getElementById('stat-roas-trend').innerHTML = `<span class="material-symbols-outlined text-xs inline-block align-text-bottom">trending_down</span> ${stats.avg_roas.trend}`;
+            document.getElementById('stat-roas-trend').innerText = stats.avg_roas.trend;
             
             document.getElementById('stat-efficiency').innerText = stats.ai_efficiency.value;
-            document.getElementById('stat-efficiency-trend').innerHTML = `<span class="material-symbols-outlined text-xs inline-block align-text-bottom">auto_awesome</span> ${stats.ai_efficiency.trend}`;
+            document.getElementById('stat-efficiency-trend').innerText = '최적화 중';
 
             const campResp = await fetch('/api/campaigns');
             const campaigns = await campResp.json();
             const campListBody = document.getElementById('campaign-list');
             campListBody.innerHTML = '';
             
-            campaigns.slice(0, 4).forEach(camp => {
-                const icon = camp.channel.includes('FB') ? 'rocket_launch' : (camp.channel.includes('구글') ? 'ads_click' : 'shopping_bag');
-                
+            campaigns.slice(0, 3).forEach(camp => {
                 campListBody.innerHTML += `
-                <div class="flex items-center gap-3 group cursor-pointer hover:bg-white dark:hover:bg-slate-800 transition-all rounded-lg p-1">
-                    <div class="w-9 h-9 bg-surface-container-high dark:bg-slate-800 rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                        <span class="material-symbols-outlined text-sm">${icon}</span>
+                <div class="flex items-center gap-3 bg-white dark:bg-slate-800 p-3 rounded-xl border border-outline-variant/5">
+                    <div class="w-8 h-8 bg-surface-container-high rounded-lg flex items-center justify-center text-primary text-[10px] font-bold">
+                        ${camp.channel.substring(0,2)}
                     </div>
                     <div class="flex-1 overflow-hidden">
-                        <p class="text-[11px] font-bold truncate">${camp.name}</p>
-                        <p class="text-[9px] text-on-surface-variant dark:text-slate-400 truncate">${camp.channel} • ${camp.roas}</p>
+                        <p class="text-[10px] font-black truncate">${camp.name}</p>
+                        <div class="flex justify-between items-center mt-0.5">
+                            <span class="text-[9px] text-on-surface-variant">${camp.roas}</span>
+                            <span class="text-[8px] font-bold text-[#14B8A6]">TOP</span>
+                        </div>
                     </div>
                 </div>`;
             });
@@ -231,5 +226,7 @@
     });
 
     fetchData();
+    // Auto-refresh stats every 30s
+    setInterval(fetchData, 30000);
 </script>
 {% endblock %}
