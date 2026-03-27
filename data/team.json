@@ -12,7 +12,7 @@
             "name": "Lumina Tech Spring Campaign",
             "client": "Lumina Tech",
             "progress": 85,
-            "status": "On Track",
+            "status": "원활",
             "deadline": "2026-04-15",
             "priority": "High",
             "members": ["김철수", "이영희"]
@@ -22,7 +22,7 @@
             "name": "Global SaaS Expansion",
             "client": "Nexus Corp",
             "progress": 42,
-            "status": "Delayed",
+            "status": "지연",
             "deadline": "2026-05-10",
             "priority": "Medium",
             "members": ["박지성", "정해인"]
@@ -32,7 +32,7 @@
             "name": "Aura Wearables Brand Identity",
             "client": "Aura Lab",
             "progress": 15,
-            "status": "At Risk",
+            "status": "이슈",
             "deadline": "2026-06-01",
             "priority": "Critical",
             "members": ["이영희", "박지성"]
@@ -42,7 +42,7 @@
             "name": "Zenith Fitness Mobile App",
             "client": "Zenith",
             "progress": 92,
-            "status": "On Track",
+            "status": "원활",
             "deadline": "2026-03-31",
             "priority": "High",
             "members": ["김철수", "정해인"]

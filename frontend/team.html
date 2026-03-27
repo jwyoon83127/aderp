@@ -26,16 +26,16 @@
             <p class="text-xs font-black uppercase text-on-surface-variant mb-1">활성 프로젝트</p>
             <h3 class="text-2xl font-black text-on-surface dark:text-white" id="prj-active-count">12</h3>
         </div>
-        <div class="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/5 shadow-sm border-l-4 border-l-[#14B8A6]">
-            <p class="text-xs font-black uppercase text-[#14B8A6] mb-1">정상 진행</p>
+        <div class="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/5 shadow-sm border-l-4 border-l-green-500">
+            <p class="text-xs font-black uppercase text-green-500 mb-1">원활</p>
             <h3 class="text-2xl font-black text-on-surface dark:text-white" id="prj-ontrack-count">9</h3>
         </div>
-        <div class="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/5 shadow-sm border-l-4 border-l-warning">
-            <p class="text-xs font-black uppercase text-warning mb-1">지연됨</p>
+        <div class="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/5 shadow-sm border-l-4 border-l-yellow-500">
+            <p class="text-xs font-black uppercase text-yellow-500 mb-1">지연</p>
             <h3 class="text-2xl font-black text-on-surface dark:text-white" id="prj-delayed-count">2</h3>
         </div>
-        <div class="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/5 shadow-sm border-l-4 border-l-error">
-            <p class="text-xs font-black uppercase text-error mb-1">위험</p>
+        <div class="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/5 shadow-sm border-l-4 border-l-red-500">
+            <p class="text-xs font-black uppercase text-red-500 mb-1">이슈</p>
             <h3 class="text-2xl font-black text-on-surface dark:text-white" id="prj-atrisk-count">1</h3>
         </div>
     </section>
@@ -59,7 +59,7 @@
                         <h3 class="text-lg font-bold mt-2 group-hover:text-primary transition-colors">Lumina Tech Spring Campaign</h3>
                         <p class="text-xs text-on-surface-variant mt-1 font-medium">Client: Lumina Tech</p>
                     </div>
-                    <span class="text-xs font-bold bg-[#14B8A6]/10 text-[#14B8A6] px-3 py-1 rounded-full">On Track</span>
+                    <span class="text-xs font-bold bg-green-500/10 text-green-500 px-3 py-1 rounded-full">원활</span>
                 </div>
                 <!-- Progress -->
                 <div class="space-y-2 mb-8">
@@ -183,9 +183,10 @@
     }
 
     function getStatusColor(status) {
-        if (status === 'On Track') return 'bg-[#14B8A6]/10 text-[#14B8A6]';
-        if (status === 'Delayed') return 'bg-warning/10 text-warning';
-        if (status === 'At Risk') return 'bg-error/10 text-error';
+        if (status === '원활') return 'bg-green-500/10 text-green-500';
+        if (status === '지연') return 'bg-yellow-500/10 text-yellow-500';
+        if (status === '이슈') return 'bg-red-500/10 text-red-500';
+        if (status === '완료') return 'bg-blue-500/10 text-blue-500';
         return 'bg-outline-variant/10 text-outline-variant';
     }
 
