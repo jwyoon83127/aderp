@@ -193,20 +193,20 @@
         <div class="p-8 overflow-y-auto flex-1 space-y-6">
             <div>
                 <label class="block text-sm font-bold text-on-surface dark:text-white mb-2">프로젝트명</label>
-                <input type="text" class="w-full bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/20 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-on-surface dark:text-white" placeholder="예: 신규 솔루션 런칭 캠페인">
+                <input type="text" id="new-prj-name" class="w-full bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/20 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-on-surface dark:text-white" placeholder="예: 신규 솔루션 런칭 캠페인">
             </div>
             <div>
                 <label class="block text-sm font-bold text-on-surface dark:text-white mb-2">고객사 (Client)</label>
-                <input type="text" class="w-full bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/20 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-on-surface dark:text-white" placeholder="예: 구글 코리아">
+                <input type="text" id="new-prj-client" class="w-full bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/20 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-on-surface dark:text-white" placeholder="예: 구글 코리아">
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-bold text-on-surface dark:text-white mb-2">마감일</label>
-                    <input type="date" class="w-full bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/20 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-on-surface dark:text-white">
+                    <input type="date" id="new-prj-deadline" class="w-full bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/20 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-on-surface dark:text-white">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-on-surface dark:text-white mb-2">우선순위</label>
-                    <select class="w-full bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/20 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-on-surface dark:text-white">
+                    <select id="new-prj-priority" class="w-full bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/20 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-on-surface dark:text-white">
                         <option>High</option>
                         <option>Medium</option>
                         <option>Low</option>
@@ -223,21 +223,48 @@
 </div>
 
 <script>
-    function submitNewProject() {
-        document.getElementById('new-project-modal').classList.add('hidden');
-        const toast = document.createElement('div');
-        toast.className = 'fixed bottom-10 right-10 bg-on-surface text-surface dark:bg-white dark:text-slate-900 px-6 py-3 rounded-2xl shadow-2xl z-[100] font-bold text-sm opacity-0 transform translate-y-4 transition-all duration-300 flex items-center gap-3';
-        toast.innerHTML = '<span class="material-symbols-outlined text-green-400">check_circle</span> 프로젝트가 성공적으로 생성되었습니다.';
-        document.body.appendChild(toast);
-        
-        requestAnimationFrame(() => {
-            toast.classList.remove('opacity-0', 'translate-y-4');
-        });
+    async function submitNewProject() {
+        const payload = {
+            name: document.getElementById('new-prj-name').value,
+            client: document.getElementById('new-prj-client').value,
+            deadline: document.getElementById('new-prj-deadline').value,
+            priority: document.getElementById('new-prj-priority').value
+        };
 
-        setTimeout(() => {
-            toast.classList.add('opacity-0', 'translate-y-4');
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
+        if (!payload.name) { alert('프로젝트명을 입력해주세요.'); return; }
+
+        try {
+            const res = await fetch('/api/team/projects', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                document.getElementById('new-project-modal').classList.add('hidden');
+                // Clear form
+                document.getElementById('new-prj-name').value = '';
+                document.getElementById('new-prj-client').value = '';
+                document.getElementById('new-prj-deadline').value = '';
+                document.getElementById('new-prj-priority').value = 'High';
+
+                // Show toast
+                const toast = document.createElement('div');
+                toast.className = 'fixed bottom-10 right-10 bg-on-surface text-surface dark:bg-white dark:text-slate-900 px-6 py-3 rounded-2xl shadow-2xl z-[100] font-bold text-sm opacity-0 transform translate-y-4 transition-all duration-300 flex items-center gap-3';
+                toast.innerHTML = '<span class="material-symbols-outlined text-green-400">check_circle</span> 프로젝트가 성공적으로 생성되었습니다.';
+                document.body.appendChild(toast);
+                requestAnimationFrame(() => toast.classList.remove('opacity-0', 'translate-y-4'));
+                setTimeout(() => { toast.classList.add('opacity-0', 'translate-y-4'); setTimeout(() => toast.remove(), 300); }, 3000);
+
+                // Refresh data
+                fetchProjectData();
+            } else {
+                alert('프로젝트 생성에 실패했습니다.');
+            }
+        } catch (err) {
+            console.error('Error creating project:', err);
+            alert('서버와 연결할 수 없습니다.');
+        }
     }
 
     async function fetchProjectData() {

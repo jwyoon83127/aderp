@@ -102,12 +102,13 @@
                     <th class="px-8 py-4">지출액</th>
                     <th class="px-8 py-4">수익률</th>
                     <th class="px-8 py-4">상태</th>
+                    <th class="px-8 py-4 text-center">관리</th>
                 </tr>
             </thead>
             <tbody id="campaign-table-body" class="divide-y divide-outline-variant/5">
                 <!-- Rows will be loaded here -->
                 <tr>
-                    <td colspan="5" class="px-8 py-10 text-center text-on-surface-variant font-medium">데이터를 불러오는 중...</td>
+                    <td colspan="6" class="px-8 py-10 text-center text-on-surface-variant font-medium">데이터를 불러오는 중...</td>
                 </tr>
             </tbody>
         </table>
@@ -199,6 +200,12 @@
                     <td class="px-8 py-4">
                         <span class="w-2 h-2 rounded-full ${statusColor} inline-block mr-2"></span> ${statusText}
                     </td>
+                    <td class="px-8 py-4 text-center">
+                        <button onclick="deleteCampaign('${camp.name.replace(/'/g, "\\'")}')"
+                            class="text-on-surface-variant hover:text-error transition-colors p-1 rounded-lg hover:bg-error/10">
+                            <span class="material-symbols-outlined text-sm">delete</span>
+                        </button>
+                    </td>
                 </tr>`;
             });
 
@@ -251,6 +258,27 @@
         } finally {
             btn.disabled = false;
             btn.innerText = '생성하기';
+        }
+    }
+
+    async function deleteCampaign(name) {
+        if (!confirm(`"${name}" 캠페인을 삭제하시겠습니까?`)) return;
+
+        try {
+            const res = await fetch('/api/campaigns', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name })
+            });
+
+            if (res.ok) {
+                fetchCampaigns(); // Refresh
+            } else {
+                alert('캠페인 삭제에 실패했습니다.');
+            }
+        } catch (err) {
+            console.error('Error deleting campaign:', err);
+            alert('오류가 발생했습니다.');
         }
     }
 </script>

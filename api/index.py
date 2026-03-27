@@ -84,9 +84,96 @@ async def create_campaign(data: dict):
         
     return {"message": "Campaign created successfully", "campaign": new_campaign}
 
+@app.delete("/api/campaigns")
+async def delete_campaign(data: dict):
+    campaigns = load_json("campaigns.json") or []
+    name_to_delete = data.get("name", "")
+    campaigns = [c for c in campaigns if c.get("name") != name_to_delete]
+    
+    path = DATA_DIR / "campaigns.json"
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(campaigns, f, indent=4, ensure_ascii=False)
+        
+    return {"message": "Campaign deleted successfully"}
+
 @app.get("/api/team")
 async def get_team_data():
     return load_json("team.json") or {"resources": {}, "members": []}
+
+@app.post("/api/team/projects")
+async def create_project(data: dict):
+    team_data = load_json("team.json") or {"summary": {}, "projects": [], "team_workload": []}
+    
+    # Auto-increment project ID
+    existing_ids = [p.get("id", "") for p in team_data.get("projects", [])]
+    max_num = 0
+    for pid in existing_ids:
+        try:
+            max_num = max(max_num, int(pid.replace("PRJ-", "")))
+        except ValueError:
+            pass
+    new_id = f"PRJ-{max_num + 1:03d}"
+    
+    new_project = {
+        "id": new_id,
+        "name": data.get("name", "New Project"),
+        "client": data.get("client", ""),
+        "progress": 0,
+        "status": "원활",
+        "deadline": data.get("deadline", ""),
+        "priority": data.get("priority", "Medium"),
+        "members": []
+    }
+    
+    team_data["projects"].insert(0, new_project)
+    
+    # Recalculate summary
+    projects = team_data["projects"]
+    team_data["summary"]["active_projects"] = len(projects)
+    team_data["summary"]["on_track"] = len([p for p in projects if p["status"] == "원활"])
+    team_data["summary"]["delayed"] = len([p for p in projects if p["status"] == "지연"])
+    team_data["summary"]["at_risk"] = len([p for p in projects if p["status"] == "이슈"])
+    total_progress = sum(p.get("progress", 0) for p in projects)
+    team_data["summary"]["avg_progress"] = round(total_progress / len(projects)) if projects else 0
+    
+    path = DATA_DIR / "team.json"
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(team_data, f, indent=4, ensure_ascii=False)
+        
+    return {"message": "Project created successfully", "project": new_project}
+
+@app.post("/api/settings/save_profile")
+async def save_profile(data: dict):
+    config = load_json("config.json") or {}
+    config["PROFILE"] = {
+        "name": data.get("name", ""),
+        "email": data.get("email", "")
+    }
+    
+    path = DATA_DIR / "config.json"
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(config, f, indent=4, ensure_ascii=False)
+        
+    return {"message": "Profile saved successfully"}
+
+@app.get("/api/settings/config")
+async def get_settings_config():
+    config = load_json("config.json") or {}
+    
+    # Return profile and masked keys
+    profile = config.get("PROFILE", {})
+    has_gemini = bool(config.get("GOOGLE_API_KEY"))
+    
+    ad_channels = config.get("AD_CHANNELS", {})
+    masked_channels = {}
+    for channel, creds in ad_channels.items():
+        masked_channels[channel] = {k: ("****" + v[-4:] if v and len(v) > 4 else bool(v)) for k, v in creds.items()} if isinstance(creds, dict) else {}
+    
+    return {
+        "profile": profile,
+        "has_gemini_key": has_gemini,
+        "ad_channels": masked_channels
+    }
 
 @app.get("/api/status")
 async def get_system_status():
