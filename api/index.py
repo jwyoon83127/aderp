@@ -98,6 +98,10 @@ async def save_ad_keys(data: dict):
         "google": {
             "dev_token": data.get("google_token"),
             "customer_id": data.get("google_id")
+        },
+        "kakao": {
+            "api_key": data.get("kakao_key"),
+            "channel_id": data.get("kakao_channel")
         }
     }
     

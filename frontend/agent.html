@@ -4,127 +4,183 @@
 
 {% block head %}
 <style>
-    .glass-morphism {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+    /* Subtle radial gradients matching the image background */
+    body {
+        background-color: #FAFAFC;
+        background-image: 
+            radial-gradient(circle at 10% 20%, rgba(240,235,255,0.6) 0%, transparent 40%),
+            radial-gradient(circle at 90% 80%, rgba(230,240,255,0.6) 0%, transparent 40%);
+        background-attachment: fixed;
+    }
+    
+    /* Scrollbar hiding for chat area if desired, or just smooth scrolling */
+    #chat-history {
+        scroll-behavior: smooth;
+    }
+    
+    .chat-container {
+        max-width: 900px;
+        margin: 0 auto;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="flex flex-col h-screen overflow-hidden">
-    <!-- Conversation Header -->
-    <header class="flex items-center justify-between px-8 py-6 border-b border-outline-variant/10 bg-white/50 backdrop-blur-md sticky top-0 z-30">
-        <div class="flex items-center gap-4">
-            <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary group transition-all hover:bg-primary hover:text-white">
-                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
-            </div>
-            <div>
-                <h1 class="text-3xl font-black text-on-surface">AdVantage AI 어시스턴트</h1>
-                <p class="text-xs text-on-surface-variant font-bold uppercase tracking-widest flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#14B8A6]"></span> 실시간 지원 및 분석 중
-                </p>
-            </div>
-        </div>
-        <div class="flex items-center gap-3">
-            <button class="flex items-center gap-2 px-4 py-2 bg-surface-container-high rounded-xl text-xs font-bold text-on-surface-variant hover:bg-primary hover:text-white transition-all">
-                <span class="material-symbols-outlined text-sm">history</span> 히스토리
-            </button>
-            <button class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl text-xs font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
-                <span class="material-symbols-outlined text-sm">add</span> 새 대화
-            </button>
-        </div>
-    </header>
-
+<div class="flex flex-col h-screen overflow-hidden relative">
+    
     <!-- Chat Area -->
-    <div class="flex-1 overflow-y-auto p-8 space-y-8 pb-32" id="chat-history">
-        <!-- AI Welcome Message -->
-        <div class="flex items-start gap-4 max-w-3xl">
-            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-primary/20">
-                <span class="material-symbols-outlined text-sm">auto_awesome</span>
-            </div>
-            <div class="bg-white p-6 rounded-2xl rounded-tl-none shadow-sm border border-outline-variant/5">
-                <p class="text-sm font-medium leading-relaxed text-on-surface">
-                    안녕하세요, JW님! AdVantage AI 어시스턴트입니다. 오늘은 캠페인 성과 분석이나 리소스 최적화에 대해 무엇을 도와드릴까요?
+    <div class="flex-1 overflow-y-auto px-6 pt-20 pb-48 w-full" id="chat-history">
+        <div class="chat-container space-y-10">
+            
+            <!-- Welcome Header -->
+            <div class="text-center mb-16" id="welcome-header">
+                <h1 class="text-4xl lg:text-5xl font-extrabold text-[#1E293B] mb-4 tracking-tight">How can I assist you today?</h1>
+                <p class="text-[#64748B] text-base lg:text-lg max-w-2xl mx-auto font-medium leading-relaxed">
+                    Get real-time insights across your campaigns, teams, and financial<br>
+                    performance with a simple question.
                 </p>
-                <div class="mt-4 flex flex-wrap gap-2">
-                    <button class="px-3 py-1.5 bg-surface-container-low rounded-lg text-xs font-bold text-primary hover:bg-primary hover:text-white transition-all">"어제 자 광고 수익률 리포트 보여줘"</button>
-                    <button class="px-3 py-1.5 bg-surface-container-low rounded-lg text-xs font-bold text-primary hover:bg-primary hover:text-white transition-all">"Lumina Tech 캠페인 예산 조정 제안해줘"</button>
+            </div>
+
+            <!-- User Message: "Which campaign performed best last week?" -->
+            <div class="flex flex-col items-end gap-1">
+                <div class="bg-[#DFE7FF] text-[#1E293B] px-6 py-4 rounded-2xl rounded-tr-sm max-w-2xl font-medium text-[15px] shadow-sm">
+                    Which campaign performed best last week?
+                </div>
+                <span class="text-[10px] font-bold text-[#94A3B8] uppercase tracking-wider mr-2">DELIVERED • 09:41 AM</span>
+            </div>
+
+            <!-- AI Response (Chart) -->
+            <div class="flex items-start gap-5 max-w-4xl">
+                <!-- AI Icon -->
+                <div class="w-10 h-10 bg-[#2CB382] rounded-xl flex items-center justify-center text-white shrink-0 shadow-md">
+                    <span class="material-symbols-outlined text-sm font-black">smart_toy</span>
+                </div>
+                <!-- AI Content Wrapper -->
+                <div class="flex-1 space-y-4 pt-1">
+                    <!-- Text -->
+                    <p class="text-[15px] font-medium leading-relaxed text-[#334155] max-w-3xl">
+                        The <strong class="text-[#0F172A]">"Summer Momentum" Facebook Campaign</strong> outperformed all other initiatives last week with a ROAS of <strong class="text-[#209B70]">4.2x</strong>.<br>
+                        Here is the comparative breakdown:
+                    </p>
+                    
+                    <!-- Chart Card -->
+                    <div class="bg-white rounded-[20px] p-8 border border-[#F1F5F9] shadow-sm relative overflow-hidden mt-2">
+                        <div class="flex items-end justify-center h-48 gap-8 sm:gap-16 pb-6 border-b border-[#F1F5F9]">
+                            <!-- Bar 1 -->
+                            <div class="flex flex-col items-center gap-3 w-16">
+                                <span class="text-xs font-bold text-[#64748B]">2.1x</span>
+                                <div class="w-10 sm:w-12 h-24 bg-[#C7D2FE] rounded-t-lg"></div>
+                                <span class="absolute bottom-2 text-[9px] sm:text-[10px] font-bold text-[#64748B] uppercase tracking-wider text-center">Brand<br class="sm:hidden">Awareness</span>
+                            </div>
+                            <!-- Bar 2 (Highlight) -->
+                            <div class="flex flex-col items-center gap-3 w-16">
+                                <span class="text-xs font-bold text-[#1D4ED8]">4.2x</span>
+                                <div class="w-10 sm:w-12 h-36 bg-[#1D4ED8] rounded-t-lg shadow-lg shadow-blue-500/20"></div>
+                                <span class="absolute bottom-2 text-[9px] sm:text-[10px] font-bold text-[#1D4ED8] uppercase tracking-wider text-center">Summer<br class="sm:hidden">Momentum</span>
+                            </div>
+                            <!-- Bar 3 -->
+                            <div class="flex flex-col items-center gap-3 w-16">
+                                <span class="text-xs font-bold text-[#64748B]">1.8x</span>
+                                <div class="w-10 sm:w-12 h-16 bg-[#C7D2FE] rounded-t-lg"></div>
+                                <span class="absolute bottom-2 text-[9px] sm:text-[10px] font-bold text-[#64748B] uppercase tracking-wider text-center">Retargeting<br class="sm:hidden">X</span>
+                            </div>
+                            <!-- Bar 4 -->
+                            <div class="flex flex-col items-center gap-3 w-16">
+                                <span class="text-xs font-bold text-[#64748B]">3.0x</span>
+                                <div class="w-10 sm:w-12 h-28 bg-[#C7D2FE] rounded-t-lg"></div>
+                                <span class="absolute bottom-2 text-[9px] sm:text-[10px] font-bold text-[#64748B] uppercase tracking-wider text-center">New<br class="sm:hidden">Arrivals</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommendation Pill -->
+                    <div class="inline-flex items-center gap-2 bg-[#ECFDF5] text-[#047857] px-4 py-2 rounded-full text-xs font-bold border border-[#A7F3D0] shadow-sm">
+                        <span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+                        Recommendation: Increase "Summer Momentum" daily budget by 15%
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- User Message Mock -->
-        <div class="flex items-start gap-4 max-w-3xl ml-auto flex-row-reverse">
-            <div class="w-10 h-10 bg-primary-container rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-primary-container/20">
-                <span class="material-symbols-outlined text-sm">person</span>
+            <!-- User Message 2 -->
+            <div class="flex flex-col items-end gap-1 pt-6">
+                <div class="bg-[#DFE7FF] text-[#1E293B] px-6 py-4 rounded-2xl rounded-tr-sm max-w-2xl font-medium text-[15px] shadow-sm">
+                    Will I hit my revenue target this month?
+                </div>
+                <span class="text-[10px] font-bold text-[#94A3B8] uppercase tracking-wider mr-2">DELIVERED • 10:05 AM</span>
             </div>
-            <div class="bg-primary text-white p-6 rounded-2xl rounded-tr-none shadow-lg">
-                <p class="text-sm font-medium leading-relaxed">
-                    이번 달 전체 광고 집행 비용과 평균 CPA 변화 추이를 알고 싶어.
-                </p>
-            </div>
-        </div>
 
-        <!-- AI Response Mock -->
-        <div class="flex items-start gap-4 max-w-4xl">
-            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-primary/20">
-                <span class="material-symbols-outlined text-sm">auto_awesome</span>
-            </div>
-            <div class="bg-white p-6 rounded-2xl rounded-tl-none shadow-sm border border-outline-variant/5 w-full">
-                <p class="text-sm font-medium leading-relaxed text-on-surface mb-6">
-                    네, 분석 결과 이번 달 총 광고 집행 비용은 <span class="font-bold text-primary">$42,850</span>으로 전월 대비 <span class="text-[#14B8A6] font-bold">5.2% 상승</span>했습니다. 평균 CPA는 <span class="font-bold text-primary">$34.33</span>으로 <span class="text-[#14B8A6] font-bold">2.1% 개선</span>된 상태입니다.
-                </p>
-                <!-- Sample Chart/Metric Grid -->
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="bg-surface-container-low p-4 rounded-xl">
-                        <p class="text-xs font-black uppercase tracking-tighter text-on-surface-variant">Total Spend</p>
-                        <p class="text-lg font-black text-primary">$42.8k</p>
-                    </div>
-                    <div class="bg-surface-container-low p-4 rounded-xl">
-                        <p class="text-xs font-black uppercase tracking-tighter text-on-surface-variant">Avg. CPA</p>
-                        <p class="text-lg font-black text-tertiary">$34.3</p>
-                    </div>
-                    <div class="bg-surface-container-low p-4 rounded-xl border border-primary/20 bg-primary/5">
-                        <p class="text-xs font-black uppercase tracking-tighter text-primary">ROAS Goal</p>
-                        <p class="text-lg font-black text-primary">4.5x</p>
-                    </div>
-                    <div class="bg-surface-container-low p-4 rounded-xl">
-                        <p class="text-xs font-black uppercase tracking-tighter text-on-surface-variant">Conversion Rate</p>
-                        <p class="text-lg font-black text-tertiary">3.2%</p>
+            <!-- AI Response 2 (KPIs) -->
+            <div class="flex items-start gap-5 max-w-4xl">
+                <!-- AI Icon -->
+                <div class="w-10 h-10 bg-[#2CB382] rounded-xl flex items-center justify-center text-white shrink-0 shadow-md">
+                    <span class="material-symbols-outlined text-sm font-black">smart_toy</span>
+                </div>
+                <!-- AI Content Wrapper -->
+                <div class="flex-1 space-y-4 pt-1">
+                    <!-- Chart Card -->
+                    <div class="bg-white rounded-[20px] p-8 border border-[#F1F5F9] shadow-sm relative overflow-hidden">
+                        <div class="flex flex-col sm:flex-row justify-between items-start mb-8 gap-8">
+                            <p class="text-[15px] font-medium leading-relaxed text-[#334155] max-w-xl">
+                                Based on current trends and scheduled campaign launches, you are currently projected to achieve 
+                                <strong class="text-[#0F172A]">104% of your monthly goal</strong>.
+                            </p>
+                            <!-- Progress Circle Mock -->
+                            <div class="w-16 h-16 rounded-full border-[5px] border-[#2CB382] flex items-center justify-center shrink-0">
+                                <span class="text-sm font-bold text-[#047857]">104%</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-[#F8FAFC] rounded-[16px] p-6 text-left">
+                                <p class="text-[10px] text-[#64748B] font-bold uppercase tracking-wider mb-2">Target Revenue</p>
+                                <p class="text-3xl font-black text-[#1E293B] tracking-tight">$1.25M</p>
+                            </div>
+                            <div class="bg-[#F8FAFC] rounded-[16px] p-6 text-left">
+                                <p class="text-[10px] text-[#64748B] font-bold uppercase tracking-wider mb-2">Projected Actual</p>
+                                <p class="text-3xl font-black text-[#1E293B] tracking-tight">$1.31M</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
-    <!-- Suggested Actions -->
-    <div class="fixed bottom-28 left-64 right-0 px-8 flex justify-center gap-3 z-40 pointer-events-none">
-        <button class="pointer-events-auto px-4 py-2 bg-white rounded-full text-xs font-medium text-primary hover:bg-primary hover:text-white transition-all shadow-sm border border-primary/5">
-            "Nexus 캠페인 예산 최적화해줘"
-        </button>
-        <button class="pointer-events-auto px-4 py-2 bg-white rounded-full text-xs font-medium text-primary hover:bg-primary hover:text-white transition-all shadow-sm border border-primary/5">
-            "재무 대시보드 업데이트해줘"
-        </button>
-    </div>
-
-    <!-- Central AI Input -->
-    <div class="fixed bottom-10 left-64 right-0 px-8 max-w-5xl mx-auto z-50">
-        <div class="relative group">
-            <div class="absolute inset-0 bg-primary/10 blur-2xl rounded-full transition-all group-focus-within:bg-primary/20"></div>
-            <div class="relative flex items-center bg-white rounded-2xl p-2 shadow-2xl shadow-primary/10 border border-primary-container/10">
-                <div class="flex items-center px-4">
-                    <span class="material-symbols-outlined text-primary">attachment</span>
-                </div>
-                <input id="chat-input"
-                    class="flex-1 bg-transparent border-none py-4 text-base font-medium focus:ring-0 placeholder:text-outline/60 text-on-surface"
-                    placeholder="비즈니스에 관해 무엇이든 물어보세요..." type="text" />
-                <button id="send-button"
-                    class="bg-gradient-to-br from-primary to-primary-container w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
-                    <span class="material-symbols-outlined">send</span>
+    <!-- Suggested Actions / Input Area absolute bottom pinning -->
+    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#FAFAFC] via-[#FAFAFC] to-transparent pt-12 pb-8 px-6 z-40">
+        <div class="max-w-4xl mx-auto flex flex-col items-center gap-6">
+            
+            <!-- Pill Suggestions -->
+            <div class="flex flex-wrap justify-center gap-3 action-pills">
+                <button class="px-5 py-2.5 bg-white rounded-full text-xs font-bold text-[#2563EB] hover:bg-blue-50 transition-all shadow-sm border border-[#E0E7FF]">
+                    "Breakdown of CPA by channel"
+                </button>
+                <button class="px-5 py-2.5 bg-white rounded-full text-xs font-bold text-[#2563EB] hover:bg-blue-50 transition-all shadow-sm border border-[#E0E7FF]">
+                    "Analyze client churn risk"
+                </button>
+                <button class="px-5 py-2.5 bg-white rounded-full text-xs font-bold text-[#2563EB] hover:bg-blue-50 transition-all shadow-sm border border-[#E0E7FF]">
+                    "Update my financial dashboard"
                 </button>
             </div>
+
+            <!-- Chat Input -->
+            <div class="relative w-full max-w-3xl group">
+                <div class="absolute inset-0 bg-[#E0E7FF]/50 blur-xl rounded-full transition-all group-focus-within:bg-[#E0E7FF]"></div>
+                <div class="relative flex items-center bg-white rounded-full p-2 shadow-xl shadow-blue-500/5 border border-[#E0E7FF]">
+                    <div class="flex items-center px-4">
+                        <span class="material-symbols-outlined text-[#94A3B8]">attachment</span>
+                    </div>
+                    <input id="chat-input"
+                        class="flex-1 bg-transparent border-none py-3 text-[15px] font-medium focus:ring-0 placeholder:text-[#94A3B8] text-[#1E293B]"
+                        placeholder="Ask me anything..." type="text" />
+                    <button id="send-button"
+                        class="bg-[#1E293B] w-10 h-10 rounded-full flex items-center justify-center text-white shadow-md hover:scale-105 transition-transform">
+                        <span class="material-symbols-outlined text-[18px]">arrow_upward</span>
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -134,28 +190,42 @@
 <script>
     const chatInput = document.getElementById('chat-input');
     const sendButton = document.getElementById('send-button');
-    const chatHistory = document.getElementById('chat-history');
+    const chatHistory = document.querySelector('.chat-container');
+    const scrollContainer = document.getElementById('chat-history');
 
-    function appendMessage(text, isUser = false) {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = isUser 
-            ? "flex items-start gap-4 max-w-3xl ml-auto flex-row-reverse" 
-            : "flex items-start gap-4 max-w-3xl";
-        
-        const icon = isUser ? 'person' : 'auto_awesome';
-        const bgColor = isUser ? 'bg-primary text-white' : 'bg-white text-on-surface border border-outline-variant/5';
-        const shadow = isUser ? 'shadow-lg' : 'shadow-sm';
-        
-        msgDiv.innerHTML = `
-            <div class="w-10 h-10 ${isUser ? 'bg-primary-container' : 'bg-primary'} rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg">
-                <span class="material-symbols-outlined text-sm">${icon}</span>
-            </div>
-            <div class="${bgColor} p-6 rounded-2xl ${isUser ? 'rounded-tr-none' : 'rounded-tl-none'} ${shadow}">
-                <p class="text-sm font-medium leading-relaxed">${text}</p>
+    function appendUserMessage(text) {
+        const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        const html = `
+            <div class="flex flex-col items-end gap-1 pt-6">
+                <div class="bg-[#DFE7FF] text-[#1E293B] px-6 py-4 rounded-2xl rounded-tr-sm max-w-2xl font-medium text-[15px] shadow-sm">
+                    ${text}
+                </div>
+                <span class="text-[10px] font-bold text-[#94A3B8] uppercase tracking-wider mr-2">DELIVERED • ${time}</span>
             </div>
         `;
-        chatHistory.appendChild(msgDiv);
-        chatHistory.scrollTop = chatHistory.scrollHeight;
+        chatHistory.insertAdjacentHTML('beforeend', html);
+        scrollToBottom();
+    }
+
+    function appendAIMessage(text) {
+        const html = `
+            <div class="flex items-start gap-5 max-w-4xl pt-6">
+                <div class="w-10 h-10 bg-[#2CB382] rounded-xl flex items-center justify-center text-white shrink-0 shadow-md">
+                    <span class="material-symbols-outlined text-sm font-black">smart_toy</span>
+                </div>
+                <div class="flex-1 space-y-4 pt-1">
+                    <p class="text-[15px] font-medium leading-relaxed text-[#334155] max-w-3xl">
+                        ${text.replace(/\n/g, '<br>')}
+                    </p>
+                </div>
+            </div>
+        `;
+        chatHistory.insertAdjacentHTML('beforeend', html);
+        scrollToBottom();
+    }
+
+    function scrollToBottom() {
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
     }
 
     async function handleSend() {
@@ -163,7 +233,12 @@
         if (!text) return;
 
         chatInput.value = '';
-        appendMessage(text, true);
+        
+        // Hide welcome header on first interaction
+        const welcomeHeader = document.getElementById('welcome-header');
+        if (welcomeHeader) welcomeHeader.style.display = 'none';
+
+        appendUserMessage(text);
 
         try {
             const response = await fetch('/api/agent/ask', {
@@ -173,20 +248,28 @@
             });
             const data = await response.json();
             
-            // Add a small delay for "thinking" feel
             setTimeout(() => {
-                appendMessage(data.response, false);
-            }, 600);
+                appendAIMessage(data.response);
+            }, 500);
 
         } catch (err) {
             console.error('Failed to ask AI:', err);
-            appendMessage("죄송합니다. 오류가 발생했습니다. 다시 시도해주세요.", false);
+            appendAIMessage("Sorry, an error occurred while processing your request. Please try again.");
         }
     }
 
     sendButton.addEventListener('click', handleSend);
     chatInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleSend();
+    });
+
+    // Make suggestion pills clickable
+    document.querySelectorAll('.action-pills button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const text = btn.innerText.replace(/"/g, '');
+            chatInput.value = text;
+            handleSend();
+        });
     });
 </script>
 {% endblock %}
