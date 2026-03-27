@@ -4,3 +4,4 @@ jinja2
 aiofiles
 google-generativeai
 python-dotenv
+supabase
