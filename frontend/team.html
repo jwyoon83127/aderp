@@ -22,19 +22,19 @@
 
     <!-- Project Summary KPIs -->
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/5 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-outline-variant/10 dark:border-slate-800 shadow-sm">
             <p class="text-xs font-black uppercase text-on-surface-variant mb-1">활성 프로젝트</p>
             <h3 class="text-2xl font-black text-on-surface dark:text-white" id="prj-active-count">12</h3>
         </div>
-        <div class="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/5 shadow-sm border-l-4 border-l-green-500">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-outline-variant/10 dark:border-slate-800 shadow-sm border-l-4 border-l-green-500">
             <p class="text-xs font-black uppercase text-green-500 mb-1">원활</p>
             <h3 class="text-2xl font-black text-on-surface dark:text-white" id="prj-ontrack-count">9</h3>
         </div>
-        <div class="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/5 shadow-sm border-l-4 border-l-yellow-500">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-outline-variant/10 dark:border-slate-800 shadow-sm border-l-4 border-l-yellow-500">
             <p class="text-xs font-black uppercase text-yellow-500 mb-1">지연</p>
             <h3 class="text-2xl font-black text-on-surface dark:text-white" id="prj-delayed-count">2</h3>
         </div>
-        <div class="bg-surface-container-lowest dark:bg-slate-900 p-6 rounded-3xl border border-outline-variant/5 shadow-sm border-l-4 border-l-red-500">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-outline-variant/10 dark:border-slate-800 shadow-sm border-l-4 border-l-red-500">
             <p class="text-xs font-black uppercase text-red-500 mb-1">이슈</p>
             <h3 class="text-2xl font-black text-on-surface dark:text-white" id="prj-atrisk-count">1</h3>
         </div>
@@ -52,7 +52,7 @@
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" id="project-grid">
             <!-- Project Card Skeleton (Will be populated by JS) -->
-            <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl border border-outline-variant/10 shadow-sm hover:shadow-md transition-all group">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-outline-variant/10 dark:border-slate-800 shadow-sm hover:shadow-md transition-all group">
                 <div class="flex justify-between items-start mb-6">
                     <div>
                         <span class="text-xs font-black bg-primary/10 text-primary px-2 py-1 rounded uppercase tracking-widest">PRJ-001</span>
@@ -84,7 +84,7 @@
     </section>
 
     <!-- Resource Workload View -->
-    <section class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl border border-outline-variant/5 shadow-sm">
+    <section class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-outline-variant/10 dark:border-slate-800 shadow-sm">
         <h2 class="font-bold text-xl mb-8 border-b border-outline-variant/5 pb-4">팀 리소스 부하 (Workload)</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="workload-list">
             <!-- Workload Item -->
@@ -256,7 +256,7 @@
             // Populate Project Grid
             const grid = document.getElementById('project-grid');
             grid.innerHTML = (data.projects || []).map(prj => `
-                <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl border border-outline-variant/10 shadow-sm hover:shadow-md transition-all group">
+                <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-outline-variant/10 dark:border-slate-800 shadow-sm hover:shadow-md transition-all group">
                     <div class="flex justify-between items-start mb-6">
                         <div>
                             <span class="text-xs font-black bg-primary/10 text-primary px-2 py-1 rounded uppercase tracking-widest">${prj.id}</span>

@@ -76,7 +76,7 @@
         
         <!-- Compact KPI Cards -->
         <div class="space-y-4">
-            <a href="/camp" class="block bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-outline-variant/5 hover:border-primary/30 hover:shadow-md transition-all group">
+            <a href="/camp" class="block bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-outline-variant/10 dark:border-slate-800 hover:border-primary/30 dark:hover:border-primary/50 hover:shadow-md transition-all group">
                 <div class="flex justify-between items-start mb-2">
                     <p class="text-xs font-bold text-on-surface-variant uppercase group-hover:text-primary transition-colors">매출</p>
                     <span id="stat-revenue-trend" class="text-xs font-bold text-[#14B8A6]">---</span>
@@ -84,7 +84,7 @@
                 <h3 id="stat-revenue" class="text-lg font-black text-on-surface dark:text-white">---</h3>
             </a>
             
-            <a href="/camp" class="block bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-outline-variant/5 hover:border-primary/30 hover:shadow-md transition-all group">
+            <a href="/camp" class="block bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-outline-variant/10 dark:border-slate-800 hover:border-primary/30 dark:hover:border-primary/50 hover:shadow-md transition-all group">
                 <div class="flex justify-between items-start mb-2">
                     <p class="text-xs font-bold text-on-surface-variant uppercase group-hover:text-primary transition-colors">평균 ROAS</p>
                     <span id="stat-roas-trend" class="text-xs font-bold text-error">---</span>
@@ -92,7 +92,7 @@
                 <h3 id="stat-roas" class="text-lg font-black text-on-surface dark:text-white">---</h3>
             </a>
             
-            <a href="/team" class="block bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-outline-variant/5 hover:border-primary/30 hover:shadow-md transition-all group">
+            <a href="/team" class="block bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-outline-variant/10 dark:border-slate-800 hover:border-primary/30 dark:hover:border-primary/50 hover:shadow-md transition-all group">
                 <div class="flex justify-between items-start mb-2">
                     <p class="text-xs font-bold text-on-surface-variant uppercase group-hover:text-primary transition-colors">AI 효율</p>
                     <span id="stat-efficiency-trend" class="text-xs font-bold text-primary">---</span>
@@ -201,7 +201,7 @@
             
             campaigns.slice(0, 3).forEach(camp => {
                 campListBody.innerHTML += `
-                <div class="flex items-center gap-3 bg-white dark:bg-slate-800 p-3 rounded-xl border border-outline-variant/5">
+                <div class="flex items-center gap-3 bg-white dark:bg-slate-900 p-3 rounded-xl border border-outline-variant/10 dark:border-slate-800">
                     <div class="w-8 h-8 bg-surface-container-high rounded-lg flex items-center justify-center text-primary text-xs font-bold">
                         ${camp.channel.substring(0,2)}
                     </div>
