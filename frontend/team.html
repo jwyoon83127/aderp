@@ -11,10 +11,10 @@
             <p class="text-on-surface-variant dark:text-slate-400 mt-1 font-medium">실시간 프로젝트 진행 상황과 리소스 할당 상태를 모니터링하세요.</p>
         </div>
         <div class="flex gap-4">
-            <button class="bg-surface-container-high dark:bg-slate-900 px-6 py-2 rounded-xl text-sm font-bold border border-outline-variant/10 hover:text-primary transition-colors flex items-center gap-2">
+            <button onclick="document.getElementById('timeline-modal').classList.remove('hidden')" class="bg-surface-container-high dark:bg-slate-900 px-6 py-2 rounded-xl text-sm font-bold border border-outline-variant/10 hover:text-primary transition-colors flex items-center gap-2">
                 <span class="material-symbols-outlined text-sm">timeline</span> 전체 타임라인
             </button>
-            <button class="bg-primary text-white px-6 py-2 rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+            <button onclick="document.getElementById('new-project-modal').classList.remove('hidden')" class="bg-primary text-white px-6 py-2 rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
                 새 프로젝트
             </button>
         </div>
@@ -110,7 +110,136 @@
     </section>
 </div>
 
+<!-- Timeline Modal -->
+<div id="timeline-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    <div class="fixed inset-0 bg-on-surface/20 dark:bg-black/50 backdrop-blur-sm transition-opacity" onclick="document.getElementById('timeline-modal').classList.add('hidden')"></div>
+    <div class="bg-surface dark:bg-slate-900 w-full max-w-5xl rounded-3xl shadow-2xl z-10 overflow-hidden flex flex-col max-h-[90vh]">
+        <div class="px-8 py-6 border-b border-outline-variant/10 flex justify-between items-center bg-surface-container-lowest dark:bg-slate-950">
+            <h2 class="text-xl font-extrabold text-on-surface dark:text-white flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">view_timeline</span> 전체 타임라인
+            </h2>
+            <button onclick="document.getElementById('timeline-modal').classList.add('hidden')" class="text-on-surface-variant hover:text-error transition-colors p-2 rounded-full hover:bg-error/10">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="p-8 overflow-y-auto flex-1 bg-surface dark:bg-slate-900 relative">
+            <div class="space-y-6 relative">
+                <div class="absolute left-32 top-0 bottom-0 w-px bg-outline-variant/20"></div>
+                <!-- PRJ-001 -->
+                <div class="flex items-center gap-6 relative">
+                    <div class="w-24 shrink-0 text-right">
+                        <p class="text-sm font-bold text-on-surface dark:text-white">PRJ-001</p>
+                        <p class="text-xs text-on-surface-variant">Lumina Tech</p>
+                    </div>
+                    <div class="flex-1 bg-surface-container-high dark:bg-slate-800 rounded-full h-8 flex items-center overflow-hidden relative border border-outline-variant/5">
+                        <div class="bg-gradient-to-r from-green-400 to-green-600 h-full absolute left-[10%] w-[60%] rounded-full opacity-80 backdrop-blur-md border hover:opacity-100 transition-opacity flex items-center px-4 cursor-pointer">
+                            <span class="text-[10px] text-white font-bold tracking-widest leading-none">85% - 원활</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- PRJ-002 -->
+                <div class="flex items-center gap-6 relative">
+                    <div class="w-24 shrink-0 text-right">
+                        <p class="text-sm font-bold text-on-surface dark:text-white">PRJ-002</p>
+                        <p class="text-xs text-on-surface-variant">Global SaaS</p>
+                    </div>
+                    <div class="flex-1 bg-surface-container-high dark:bg-slate-800 rounded-full h-8 flex items-center overflow-hidden relative border border-outline-variant/5">
+                        <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 h-full absolute left-[25%] w-[40%] rounded-full opacity-80 backdrop-blur-md hover:opacity-100 transition-opacity flex items-center px-4 cursor-pointer">
+                            <span class="text-[10px] text-white font-bold tracking-widest leading-none">42% - 지연</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- PRJ-003 -->
+                <div class="flex items-center gap-6 relative">
+                    <div class="w-24 shrink-0 text-right">
+                        <p class="text-sm font-bold text-on-surface dark:text-white">PRJ-003</p>
+                        <p class="text-xs text-on-surface-variant">Aura Wearables</p>
+                    </div>
+                    <div class="flex-1 bg-surface-container-high dark:bg-slate-800 rounded-full h-8 flex items-center overflow-hidden relative border border-outline-variant/5">
+                        <div class="bg-gradient-to-r from-red-400 to-red-600 h-full absolute left-[0%] w-[25%] rounded-full opacity-80 backdrop-blur-md hover:opacity-100 transition-opacity flex items-center px-4 cursor-pointer">
+                            <span class="text-[10px] text-white font-bold tracking-widest leading-none">15% - 이슈</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- PRJ-004 -->
+                <div class="flex items-center gap-6 relative">
+                    <div class="w-24 shrink-0 text-right">
+                        <p class="text-sm font-bold text-on-surface dark:text-white">PRJ-004</p>
+                        <p class="text-xs text-on-surface-variant">Zenith Fitness</p>
+                    </div>
+                    <div class="flex-1 bg-surface-container-high dark:bg-slate-800 rounded-full h-8 flex items-center overflow-hidden relative border border-outline-variant/5">
+                        <div class="bg-gradient-to-r from-green-400 to-green-600 h-full absolute left-[5%] w-[80%] rounded-full opacity-80 backdrop-blur-md hover:opacity-100 transition-opacity flex items-center px-4 cursor-pointer">
+                            <span class="text-[10px] text-white font-bold tracking-widest leading-none">92% - 원활</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Project Modal -->
+<div id="new-project-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    <div class="fixed inset-0 bg-on-surface/20 dark:bg-black/50 backdrop-blur-sm transition-opacity" onclick="document.getElementById('new-project-modal').classList.add('hidden')"></div>
+    <div class="bg-surface dark:bg-slate-900 w-full max-w-lg rounded-3xl shadow-2xl z-10 overflow-hidden flex flex-col max-h-[90vh]">
+        <div class="px-8 py-6 border-b border-outline-variant/10 flex justify-between items-center bg-surface-container-lowest dark:bg-slate-950">
+            <h2 class="text-xl font-extrabold text-on-surface dark:text-white flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">add_circle</span> 새 프로젝트 만들기
+            </h2>
+            <button onclick="document.getElementById('new-project-modal').classList.add('hidden')" class="text-on-surface-variant hover:text-error transition-colors p-2 rounded-full hover:bg-error/10">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="p-8 overflow-y-auto flex-1 space-y-6">
+            <div>
+                <label class="block text-sm font-bold text-on-surface dark:text-white mb-2">프로젝트명</label>
+                <input type="text" class="w-full bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/20 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-on-surface dark:text-white" placeholder="예: 신규 솔루션 런칭 캠페인">
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-on-surface dark:text-white mb-2">고객사 (Client)</label>
+                <input type="text" class="w-full bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/20 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-on-surface dark:text-white" placeholder="예: 구글 코리아">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-on-surface dark:text-white mb-2">마감일</label>
+                    <input type="date" class="w-full bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/20 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-on-surface dark:text-white">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-on-surface dark:text-white mb-2">우선순위</label>
+                    <select class="w-full bg-surface-container-lowest dark:bg-slate-950 border border-outline-variant/20 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all text-on-surface dark:text-white">
+                        <option>High</option>
+                        <option>Medium</option>
+                        <option>Low</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Submit -->
+            <div class="pt-4 border-t border-outline-variant/10 flex justify-end gap-3">
+                <button onclick="document.getElementById('new-project-modal').classList.add('hidden')" class="px-6 py-2 rounded-xl text-sm font-bold text-on-surface-variant hover:bg-surface-container-high transition-colors">취소</button>
+                <button onclick="submitNewProject()" class="bg-primary text-white px-6 py-2 rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:scale-105 transition-transform">프로젝트 생성</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    function submitNewProject() {
+        document.getElementById('new-project-modal').classList.add('hidden');
+        const toast = document.createElement('div');
+        toast.className = 'fixed bottom-10 right-10 bg-on-surface text-surface dark:bg-white dark:text-slate-900 px-6 py-3 rounded-2xl shadow-2xl z-[100] font-bold text-sm opacity-0 transform translate-y-4 transition-all duration-300 flex items-center gap-3';
+        toast.innerHTML = '<span class="material-symbols-outlined text-green-400">check_circle</span> 프로젝트가 성공적으로 생성되었습니다.';
+        document.body.appendChild(toast);
+        
+        requestAnimationFrame(() => {
+            toast.classList.remove('opacity-0', 'translate-y-4');
+        });
+
+        setTimeout(() => {
+            toast.classList.add('opacity-0', 'translate-y-4');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
     async function fetchProjectData() {
         try {
             const response = await fetch('/api/team');
