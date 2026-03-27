@@ -10,8 +10,7 @@
             <p class="text-on-surface-variant dark:text-slate-400 mt-1 font-medium">실시간 채널별 광고 퍼포먼스 지표입니다.</p>
         </div>
         <div class="flex gap-4">
-            <button class="bg-surface-container-high dark:bg-slate-900 px-6 py-2 rounded-xl text-sm font-bold border border-outline-variant/10">CSV 내보내기</button>
-            <button class="bg-primary text-white px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform">새 캠페인 생성</button>
+            <button onclick="openCampaignModal()" class="bg-primary text-white px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform">새 캠페인 생성</button>
         </div>
     </header>
 
@@ -114,6 +113,46 @@
         </table>
     </section>
 </div>
+
+<!-- New Campaign Modal -->
+<div id="campaign-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 hidden">
+    <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-outline-variant/10 dark:border-slate-800">
+        <div class="px-6 py-4 border-b border-outline-variant/10 dark:border-slate-800 flex justify-between items-center bg-surface-container-lowest dark:bg-slate-800">
+            <h3 class="font-bold text-lg flex items-center gap-2"><span class="material-symbols-outlined text-primary">add_circle</span>새 캠페인 생성</h3>
+            <button onclick="closeCampaignModal()" class="text-on-surface-variant hover:text-on-surface transition-colors p-1"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <form id="new-campaign-form" onsubmit="submitCampaign(event)" class="p-6 space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant mb-1">캠페인 이름</label>
+                <input type="text" id="new-camp-name" required placeholder="예: 봄 시즌 할인 이벤트" class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-2 px-3 text-sm focus:ring-primary">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant mb-1">채널</label>
+                <select id="new-camp-channel" required class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-2 px-3 text-sm focus:ring-primary">
+                    <option value="Meta Ads">Meta Ads</option>
+                    <option value="Google Search">Google Search</option>
+                    <option value="Google Display">Google Display</option>
+                    <option value="TikTok">TikTok</option>
+                    <option value="X (Twitter)">X (Twitter)</option>
+                </select>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">지출액 (Spend)</label>
+                    <input type="text" id="new-camp-spend" placeholder="$10,000" class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-2 px-3 text-sm focus:ring-primary">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">목표 ROAS</label>
+                    <input type="text" id="new-camp-roas" placeholder="4.0x" class="w-full bg-surface-container-low dark:bg-slate-800 border-none rounded-xl py-2 px-3 text-sm focus:ring-primary">
+                </div>
+            </div>
+            <div class="pt-4 flex justify-end gap-3">
+                <button type="button" onclick="closeCampaignModal()" class="px-4 py-2 rounded-xl text-sm font-bold text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-slate-800 transition-colors">취소</button>
+                <button type="submit" id="new-camp-submit-btn" class="bg-primary text-white px-5 py-2 rounded-xl text-sm font-bold shadow-md hover:bg-primary/90 transition-colors">생성하기</button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -169,5 +208,50 @@
     }
 
     fetchCampaigns();
+
+    function openCampaignModal() {
+        document.getElementById('campaign-modal').classList.remove('hidden');
+    }
+
+    function closeCampaignModal() {
+        document.getElementById('campaign-modal').classList.add('hidden');
+        document.getElementById('new-campaign-form').reset();
+    }
+
+    async function submitCampaign(event) {
+        event.preventDefault();
+        
+        const btn = document.getElementById('new-camp-submit-btn');
+        btn.disabled = true;
+        btn.innerText = '생성 중...';
+
+        const payload = {
+            name: document.getElementById('new-camp-name').value,
+            channel: document.getElementById('new-camp-channel').value,
+            spend: document.getElementById('new-camp-spend').value || '$0',
+            roas: document.getElementById('new-camp-roas').value || '0.0x'
+        };
+
+        try {
+            const res = await fetch('/api/campaigns', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                closeCampaignModal();
+                fetchCampaigns(); // Refresh the table
+            } else {
+                alert('캠페인 생성에 실패했습니다.');
+            }
+        } catch (error) {
+            console.error('Error creating campaign:', error);
+            alert('오류가 발생했습니다.');
+        } finally {
+            btn.disabled = false;
+            btn.innerText = '생성하기';
+        }
+    }
 </script>
 {% endblock %}

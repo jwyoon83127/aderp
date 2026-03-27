@@ -62,6 +62,28 @@ async def get_dashboard_stats():
 async def get_campaign_list():
     return load_json("campaigns.json") or []
 
+@app.post("/api/campaigns")
+async def create_campaign(data: dict):
+    campaigns = load_json("campaigns.json") or []
+    
+    new_campaign = {
+        "name": data.get("name", "New Campaign"),
+        "channel": data.get("channel", "Meta Ads"),
+        "spend": data.get("spend", "$0"),
+        "roas": data.get("roas", "0.0x"),
+        "status": "active"
+    }
+    
+    # Insert at the top of the list so it appears first, or append to end. 
+    # Usually new campaigns appear first.
+    campaigns.insert(0, new_campaign)
+    
+    path = DATA_DIR / "campaigns.json"
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(campaigns, f, indent=4, ensure_ascii=False)
+        
+    return {"message": "Campaign created successfully", "campaign": new_campaign}
+
 @app.get("/api/team")
 async def get_team_data():
     return load_json("team.json") or {"resources": {}, "members": []}
